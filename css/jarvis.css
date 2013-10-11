@@ -1,0 +1,22 @@
+#jarvis-overlay {position:fixed;top:0;right:0;bottom:0;left:0;background:rgb(0,0,0);opacity:.8;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";z-index:100;}
+#jarvis-modal {background:rgb(255,255,255);border-radius:.5em;max-width:75%;min-width:50%;padding:1em;position:fixed;left:50%;top:32px;z-index:101;}
+#jarvis-search,
+#jarvis-modal .tt-hint {background:#ebebeb;border:none;font-size:2em;padding:.5em;width:100%;}
+#jarvis-search.tt-query {background: none !important;}
+#jarvis-modal .tt-hint {color:rgb(150,150,150);}
+#jarvis-modal a {display:block;text-decoration: none;padding:.5em;border:1px solid rgb(255,255,255);}
+.twitter-typeahead {width:100%;}
+.ie8 .twitter-typeahead {background:rgb(235,235,235);}
+.tt-dropdown-menu {background:rgb(255,255,255);border-radius:.5em;padding:1em;margin:0 -1em 0 -1em;width:100%;}
+.tt-suggestion {overflow:hidden;}
+.tt-suggestion p {margin:0;}
+.tt-suggestion a:hover,
+.tt-is-under-cursor a {border-radius:.5em;background:rgb(239, 248, 255);color:rgb(213,78,33);}
+.tt-is-under-cursor a:hover {border-color:rgb(209,218,225);}
+.jarvis-icon {background:url(../../../../wp-includes/images/admin-bar-sprite.png) 0 -100px no-repeat;line-height:28px;width:28px;height:28px;float:left;}
+.jarvis-title {display:block;line-height:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.jarvis-thumbnail {float:right;height:28px;width:28px;}
+.jarvis-thumbnail img {display:block;height:28px;width:28px;}
+#wp-admin-bar-jarvis_menubar_icon a > img {height:20px;width:20px;margin-top:3px;}
+
+#jarvis-loading {position:absolute;top:50%;margin-top:-8px;right:20px;}
