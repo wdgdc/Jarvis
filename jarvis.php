@@ -1,12 +1,13 @@
 <?php
 /*
-Plugin Name: WP Jarvis
-Plugin URI: http://www.wpjarvis.com
-Description: WP Jarvis.  Wordpress at your fingertips
-Version: 2.0
-Author: David Everett, Joan Piedra, Kurtis Shaner
-Author URI: http://www.webdevelopmentgroup.com
-Text Domain: jarvis
+Plugin Name:    Jarvis
+Plugin URI:     http://www.wpjarvis.com
+Description:    Jarvis is your administration assistant, putting WordPress at your fingertips.
+Version:      0.2
+Author:       wdgdc, David Everett, Joan Piedra, Kurtis Shaner
+Author URI:     http://www.webdevelopmentgroup.com
+License:          GPLv2 or later
+Text Domain:    jarvis
 */
 
 class Jarvis {
@@ -35,7 +36,7 @@ class Jarvis {
 
 	public function enqueue() {
 		if (is_user_logged_in()) {
-			wp_enqueue_style('wp-jarvis', plugins_url('css/jarvis.css', __FILE__));  
+			wp_enqueue_style('wp-jarvis', plugins_url('css/jarvis.css', __FILE__));
 			wp_enqueue_script('typeahead', plugins_url('js/typeahead.min.js', __FILE__), array('jquery'), '0.9.3');
 			wp_enqueue_script('hogan', plugins_url('js/hogan.min.js', __FILE__), null, '2.0.0');
 			wp_enqueue_script('wp-jarvis', plugins_url('js/jarvis.js', __FILE__), array('typeahead', 'hogan'), '.1');
@@ -51,15 +52,15 @@ class Jarvis {
 			});
 		</script>
 	<?php }
-	
+
 	public function admin_menu() {
-		add_options_page('Jarvis Options', 'Jarvis', 'administrator', 'jarvis_settings', array($this, 'wp_ajax_jarvis_settings')); 
+		add_options_page('Jarvis Options', 'Jarvis', 'administrator', 'jarvis_settings', array($this, 'wp_ajax_jarvis_settings'));
 	}
-	
+
 	public function wp_ajax_jarvis_settings() {
 		include_once('settings.php');
 	}
-	
+
 	public function menubar_icon($admin_bar) {
 		$admin_bar->add_menu(array(
 			'id' => 'jarvis_menubar_icon',
@@ -71,7 +72,7 @@ class Jarvis {
 			'parent' => 'top-secondary'
 		));
 	}
-	
+
 	public function get_search_results() {
 	    global $wpdb;
 
@@ -145,12 +146,12 @@ class Jarvis {
 					$itmRrd['att_src'] = $itmRrd['att_src'][0];
 					break;
 				case 'post':
-					$itmRrd['att_src'] = wp_get_attachment_image_src(get_post_thumbnail_id($itmRrd['id'], array(28,28))); 
+					$itmRrd['att_src'] = wp_get_attachment_image_src(get_post_thumbnail_id($itmRrd['id'], array(28,28)));
 					$itmRrd['att_src'] = $itmRrd['att_src'][0];
 					break;
 			}
 		}
-		
+
 		header('Content-type: application/json');
 		echo json_encode($results);
 
