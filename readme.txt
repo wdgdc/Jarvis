@@ -13,11 +13,13 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://webdevelopmentgroup.com
 
-Jarvis is your administration assistant, putting WordPress at your fingertips via a launchbar interface.
+Jarvis is your admin assistant, putting WordPress at your fingertips via a quicksearch interface.
 
 == Description ==
 
-Think of Jarvis as a content management launch bar. Once Jarvis is installed all you have to do to start using it is hit the quick key "/", type in your search (eg, "settings") and select the page you're looking for. It's the fastest way to get from the dashboard to editing your anything on the admin side.
+Let's say you've just logged in and you're on the dashboard. You want to get to a child page of your about page called "mission", but you can't remember if it's on page 2 or 5. With Jarvis it's simple. Open Jarvis and start typing "mission" and your page will show up immediately.
+
+Once Jarvis is installed all you have to do to start using it is hit the quick key "/", type in your search (eg, "settings") and select the page you're looking for. It's the fastest way to get from the dashboard to editing your anything on the admin side.
 
 *   Access the settings for permalinks: `/` + `Permalinks` + enter and you're there.
 *   Edit your contact page: `/` + `Contact` + enter and you're there.
