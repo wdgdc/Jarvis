@@ -15,6 +15,8 @@ Donate link: http://webdevelopmentgroup.com
 
 Jarvis is your admin assistant, putting WordPress at your fingertips via a quicksearch interface.
 
+Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com), our [web design process](http://www.webdevelopmentgroup.com/services/web-design) and [WordPress development experience](http://www.webdevelopmentgroup.com/services/wordpress-development).
+
 == Description ==
 
 Let's say you've just logged in and you're on the dashboard. You want to get to a child page of your about page called "mission", but you can't remember if it's on page 2 or 5. With Jarvis it's simple. Open Jarvis and start typing "mission" and your page will show up immediately.
