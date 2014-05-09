@@ -39,7 +39,7 @@ class Jarvis {
 			wp_enqueue_style('wp-jarvis', plugins_url('css/jarvis.css', __FILE__));
 			wp_enqueue_script('typeahead', plugins_url('js/typeahead.min.js', __FILE__), array('jquery'), '0.9.3');
 			wp_enqueue_script('hogan', plugins_url('js/hogan.min.js', __FILE__), null, '2.0.0');
-			wp_enqueue_script('wp-jarvis', plugins_url('js/jarvis.js', __FILE__), array('typeahead', 'hogan'), '.1');
+			wp_enqueue_script('wp-jarvis', plugins_url('js/jarvis.min.js', __FILE__), array('typeahead', 'hogan'), '.1');
 		}
 	}
 
