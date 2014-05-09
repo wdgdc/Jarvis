@@ -6,9 +6,9 @@ Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 3.3
-Tested up to: 3.6.1
-Stable tag: 0.2
-Version: 0.2
+Tested up to: 3.9.1
+Stable tag: 0.3
+Version: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://webdevelopmentgroup.com
@@ -64,3 +64,7 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 = 0.2 =
 * Official initial release.
+
+= 0.3 =
+* Updated to work with dashicons of WP 3.8+
+* Use search icon instead of J as a more intuitive icon
