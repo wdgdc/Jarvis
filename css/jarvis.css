@@ -1,5 +1,5 @@
-#jarvis-overlay {position:fixed;top:0;right:0;bottom:0;left:0;background:rgb(0,0,0);opacity:.8;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";z-index:100;}
-#jarvis-modal {background:rgb(255,255,255);border-radius:.5em;max-width:75%;min-width:50%;padding:1em;position:fixed;left:50%;top:32px;z-index:101;}
+#jarvis-overlay {position:fixed;top:0;right:0;bottom:0;left:0;background:rgb(0,0,0);opacity:.8;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";z-index:100000;}
+#jarvis-modal {background:rgb(255,255,255);border-radius:.5em;max-width:75%;min-width:50%;padding:1em;position:fixed;left:50%;top:32px;z-index:100001;}
 #jarvis-search,
 #jarvis-modal .tt-hint {background:#ebebeb;border:none;font-size:2em;padding:.5em;width:100%;}
 #jarvis-search.tt-query {background: none !important;}
@@ -14,6 +14,8 @@
 .tt-is-under-cursor a {border-radius:.5em;background:rgb(239, 248, 255);color:rgb(213,78,33);}
 .tt-is-under-cursor a:hover {border-color:rgb(209,218,225);}
 .jarvis-icon {background:url(../../../../wp-includes/images/admin-bar-sprite.png) 0 -100px no-repeat;line-height:28px;width:28px;height:28px;float:left;}
+.jarvis-icon.dashicons-before {background:none;}
+.jarvis-icon.dashicons-before:before {vertical-align:middle;}
 .jarvis-title {display:block;line-height:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .jarvis-thumbnail {float:right;height:28px;width:28px;}
 .jarvis-thumbnail img {display:block;height:28px;width:28px;}
