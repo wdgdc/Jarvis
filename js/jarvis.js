@@ -73,7 +73,7 @@ var Jarvis = (function(window, $) {
 				sanitize = function(elem) {
 					return $(elem).clone().find('span').remove().end().text();
 				}
-				section = $(this).parents('.wp-has-submenu')
+				section = $(this).closest('.menu-top')
 				prefix = sanitize(section.find('a > .wp-menu-name')); 
 				title = sanitize(this);
 				
