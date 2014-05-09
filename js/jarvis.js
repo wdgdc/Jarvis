@@ -116,7 +116,7 @@ var Jarvis = (function(window, $) {
 						return null;
 					}
 				})();
-				
+								
 				// store reference in icons object to match later with types from server
 				self.icons[prefix.toLowerCase()] = icon;
 				
@@ -197,7 +197,7 @@ var Jarvis = (function(window, $) {
 			}
 			for(var icon in iconMap) {
 				if (iconMap.hasOwnProperty(icon)) {
-					self.icons[icon] = iconMap[icon];
+					self.icons[icon] = (self.settings.dashicons) ? iconMap[icon] : self.icons[iconMap[icon]['image-icon']];
 				}
 			}
 			
@@ -291,8 +291,8 @@ var Jarvis = (function(window, $) {
 						filter:function(datums) {
 							for(var i=0; i<datums.length; i++) {
 								datums[i].icon = self.icons[datums[i].type];
-								datums[i].iconclass = 'dashicons-before '+ datums[i].icon.dashicon;
-								datums[i].image = datums[i].icon.image;
+								datums[i].iconclass = (self.settings.dashicons) ? 'dashicons-before '+ datums[i].icon.dashicon : 'image-icon';
+								datums[i].image = datums[i].icon.icon;
 							}
 							return datums;
 						},
