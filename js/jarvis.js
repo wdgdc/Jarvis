@@ -86,8 +86,8 @@ var Jarvis = (function(window, $) {
 					
 					if (bg && bg.className.indexOf('dashicons-before') > -1) {
 						classes = bg.className.split(' ');
-						classes.splice(classes.indexOf('wp-menu-image'), 1);
-						classes.splice(classes.indexOf('dashicons-before'), 1);
+						classes.splice($.inArray('wp-menu-image', classes), 1);
+						classes.splice($.inArray('dashicons-before', classes), 1);
 						return {
 							type: 'dashicon',
 							icon: classes[0]
