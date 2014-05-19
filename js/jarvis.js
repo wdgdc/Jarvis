@@ -63,7 +63,7 @@ var Jarvis = (function(window, $) {
 			$(this.search).typeahead('destroy');
 		},
 		init:function() {
-			var self = this, option, links, section, node, iconMap;
+			var self = this, option, links, section, node, iconMap, entry;
 			
 			// scrape wordpress menu for sidebar links
 			$('#adminmenu a').each(function(i, elem) {
@@ -73,29 +73,50 @@ var Jarvis = (function(window, $) {
 				sanitize = function(elem) {
 					return $(elem).clone().find('span').remove().end().text();
 				}
-				section = $(this).parents('.wp-has-submenu')
+				section = $(this).closest('.menu-top')
 				prefix = sanitize(section.find('a > .wp-menu-name')); 
 				title = sanitize(this);
 				
 				// Get section icon by calculating live background image and position
 				icon = (function() {
-					var bg = section.find('.wp-menu-image')[0], img = section.find('.wp-menu-image img')[0], styles;
-					if (img) {
+					var bg = section.find('.wp-menu-image')[0], 
+						img = section.find('.wp-menu-image img')[0], 
+						styles, 
+						classes;
+					
+					if (bg && bg.className.indexOf('dashicons-before') > -1) {
+						classes = bg.className.split(' ');
+						classes.splice($.inArray('wp-menu-image', classes), 1);
+						classes.splice($.inArray('dashicons-before', classes), 1);
+						return {
+							type: 'dashicon',
+							icon: classes[0]
+						};
+					} else if (img) {
 						// icon is image (plugin based)
-						return 'background-image:url(' + img.src + ');background-position:center';
+						return {
+							type: 'image',
+							icon: 'background-image:url(' + img.src + ');background-position:center'
+						};
 					} else if (bg) {
 						// icon is background image, possibly sprite (thus the background-position calculation);
 						styles = util.getComputedStyle(bg);
 						if (typeof styles.backgroundPosition === 'string') { // 
-							return 'background-image:' + styles.backgroundImage + ';background-position:' + styles.backgroundPosition;
+							return {
+								type: 'image',
+								icon: 'background-image:' + styles.backgroundImage + ';background-position:' + styles.backgroundPosition
+							};
 						} else {
-							return 'background-image:' + styles.backgroundImage + ';background-position-x:'+ styles.backgroundPositionX +';background-position-y:'+ styles.backgroundPositionY;
+							return {
+								type: 'image',
+								icon: 'background-image:' + styles.backgroundImage + ';background-position-x:'+ styles.backgroundPositionX +';background-position-y:'+ styles.backgroundPositionY
+							};
 						}							
 					} else {
 						return null;
 					}
 				})();
-				
+								
 				// store reference in icons object to match later with types from server
 				self.icons[prefix.toLowerCase()] = icon;
 				
@@ -111,32 +132,72 @@ var Jarvis = (function(window, $) {
 						slug = prefix + ' ' + self.settings.separator + ' ' + title;
 				}
 				
-				// 					
-				self.localData.push({
-					icon: icon,
+				entry = {
 					id: this.id || null,
 					kind: 'href',
 					href: this.href,
 					prefix: util.trim(prefix).toLowerCase(),
 					title: util.trim(slug),
-					type: 'menu'
-				});
+					type: 'menu',
+				};
+				if (icon) {
+					entry.icontype = icon.type;
+					switch(icon.type) {
+						case 'dashicon':
+							entry.iconclass = 'dashicons-before '+ icon.icon;
+							entry.image = '';
+						break;
+						case 'image':
+							entry.iconclass = 'image-icon';
+							entry.image = icon.icon;
+						break;
+					}
+				}
+				
+				self.localData.push(entry);
 			});
 			
 			iconMap = {
-				'attachment':'media',
-				'category':'posts',
-				'nav_menu':'appearance',
-				'nav_menu_item':'appearance',
-				'page':'pages',
-				'post':'posts',
-				'post_tag':'posts',
-				'post_format':'posts',
-				'term':'posts'
+				'attachment':{
+					'image-icon':'media',
+					'dashicon':'dashicons-admin-media'
+				},
+				'category':{
+					'image-icon':'posts',
+					'dashicon':'dashicons-category'
+				},
+				'nav_menu':{
+					'image-icon':'appearance',
+					'dashicon':'dashicons-admin-appearance'
+				},
+				'nav_menu_item':{
+					'image-icon':'appearance',
+					'dashicon':'dashicons-admin-appearance'
+				},
+				'page':{
+					'image-icon':'pages',
+					'dashicon':'dashicons-admin-page'
+				},
+				'post':{
+					'image-icon':'posts',
+					'dashicon':'dashicons-admin-post'
+				},
+				'post_tag':{
+					'image-icon':'posts',
+					'dashicon':'dashicons-tag'
+				},
+				'post_format':{
+					'image-icon':'posts',
+					'dashicon':'dashicons-format-standard'
+				},
+				'term':{
+					'image-icon':'posts',
+					'dashicon':'dashicons-category'
+				}
 			}
 			for(var icon in iconMap) {
-				if (iconMap.hasOwnProperty) {
-					self.icons[icon] = self.icons[iconMap[icon]];
+				if (iconMap.hasOwnProperty(icon)) {
+					self.icons[icon] = (self.settings.dashicons) ? iconMap[icon] : self.icons[iconMap[icon]['image-icon']];
 				}
 			}
 			
@@ -213,7 +274,7 @@ var Jarvis = (function(window, $) {
 					template: [
 						'<span class="{{prefix}} {{kind}}">',
 							'<a href="{{href}}">',
-								'<span class="jarvis-icon" style="{{icon}}" title="{{prefix}}"></span>',
+								'<span class="jarvis-icon {{iconclass}}" style="{{image}}" title="{{prefix}}"></span>',
 								'<span class="jarvis-title" title="{{{title}}}">{{{title}}}</span>',
 							'</a>',
 						'</span>'
@@ -228,7 +289,11 @@ var Jarvis = (function(window, $) {
 						cache: false,
 						dataType: 'json',
 						filter:function(datums) {
-							for(var i=0; i<datums.length; i++) datums[i].icon = self.icons[datums[i].type];
+							for(var i=0; i<datums.length; i++) {
+								datums[i].icon = self.icons[datums[i].type];
+								datums[i].iconclass = (self.settings.dashicons) ? 'dashicons-before '+ datums[i].icon.dashicon : 'image-icon';
+								datums[i].image = datums[i].icon.icon;
+							}
 							return datums;
 						},
 						maxParallelRequests: 10,
@@ -238,7 +303,7 @@ var Jarvis = (function(window, $) {
 						'<span class="{{kind}}">',
 							'<a href="{{href}}">',
 								'{{#att_src}}<span class="jarvis-thumbnail"><img src="{{att_src}}"></span>{{/att_src}}',
-								'<span class="jarvis-icon" style="{{icon}}" title="{{type}}"></span>',
+								'<span class="jarvis-icon {{iconclass}}" style="{{image}}" title="{{type}}"></span>',
 								'<span class="jarvis-title" title="{{{title}}}">{{{title}}}</span>',
 							'</a>',
 						'</span>'
