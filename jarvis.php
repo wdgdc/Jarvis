@@ -1,13 +1,13 @@
 <?php
 /*
-Plugin Name:	Jarvis
-Plugin URI:		http://www.wpjarvis.com
-Description:	Jarvis is your administration assistant, putting WordPress at your fingertips.
-Version:		0.31
-Author:			wdgdc, David Everett, Joan Piedra, Kurtis Shaner
-Author URI:		http://www.webdevelopmentgroup.com
-License:		GPLv2 or later
-Text Domain:	jarvis
+Plugin Name:    Jarvis
+Plugin URI:     http://www.wpjarvis.com
+Description:    Jarvis is your administration assistant, putting WordPress at your fingertips.
+Version:      0.3
+Author:       wdgdc, David Everett, Joan Piedra, Kurtis Shaner
+Author URI:     http://www.webdevelopmentgroup.com
+License:          GPLv2 or later
+Text Domain:    jarvis
 */
 
 class Jarvis {
@@ -31,6 +31,7 @@ class Jarvis {
 		add_action('admin_bar_menu', array($this, 'menubar_icon'), 100);
 		add_action('wp_ajax_jarvis_settings', array($this, 'wp_ajax_jarvis_settings'));
 		add_action('admin_init', array($this, 'resigter_jarvis_settings'));
+
 	}
 
 	public function resigter_jarvis_settings() {
