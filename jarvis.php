@@ -1,13 +1,13 @@
 <?php
 /*
-Plugin Name:    Jarvis
-Plugin URI:     http://www.wpjarvis.com
-Description:    Jarvis is your administration assistant, putting WordPress at your fingertips.
-Version:      0.3
-Author:       wdgdc, David Everett, Joan Piedra, Kurtis Shaner
-Author URI:     http://www.webdevelopmentgroup.com
-License:          GPLv2 or later
-Text Domain:    jarvis
+Plugin Name:	Jarvis
+Plugin URI:		http://www.wpjarvis.com
+Description:	Jarvis is your administration assistant, putting WordPress at your fingertips.
+Version:		0.31
+Author:			wdgdc, David Everett, Joan Piedra, Kurtis Shaner
+Author URI:		http://www.webdevelopmentgroup.com
+License:		GPLv2 or later
+Text Domain:	jarvis
 */
 
 class Jarvis {
@@ -31,7 +31,6 @@ class Jarvis {
 		add_action('admin_bar_menu', array($this, 'menubar_icon'), 100);
 		add_action('wp_ajax_jarvis_settings', array($this, 'wp_ajax_jarvis_settings'));
 		add_action('admin_init', array($this, 'resigter_jarvis_settings'));
-
 	}
 
 	public function resigter_jarvis_settings() {
@@ -48,17 +47,21 @@ class Jarvis {
 		}
 	}
 
-	public function init() { 
+	public function init() {
 		global $wp_version;
-		?>
-		<script>
-			var wp = wp || {};
-			wp.jarvis = new Jarvis(<?php echo json_encode($this->options); ?>);
-			jQuery("#wp-admin-bar-jarvis_menubar_icon a").on("click", function(e) {
-				wp.jarvis.open(e); 
-			});
-		</script>
-	<?php }
+
+		if ( current_user_can('edit_posts') ) { ?>
+			<script>
+				var wp = wp || {};
+				wp.jarvis = new Jarvis(<?php echo json_encode($this->options); ?>);
+				jQuery("#wp-admin-bar-jarvis_menubar_icon a").on("click", function(e) {
+					wp.jarvis.open(e);
+					console.log('hello');
+				});
+			</script>
+		<?php 
+		}
+	}
 
 	public function admin_menu() {
 		add_options_page('Jarvis Options', 'Jarvis', 'administrator', 'jarvis_settings', array($this, 'wp_ajax_jarvis_settings'));
@@ -69,18 +72,21 @@ class Jarvis {
 	}
 
 	public function menubar_icon($admin_bar) {
-		$className = ($this->options['dashicons'] === true) ? 'dashicon' : 'image';
 
-		$admin_bar->add_menu(array(
-			'id' => 'jarvis_menubar_icon',
-			'title' => '<span>Jarvis Search</span>',
-			'href' => '#jarvis',
-			'meta' => array(
-				'title' => 'Invoke Jarvis',
-				'class' => $className
-			),
-			'parent' => 'top-secondary'
-		));
+		if ( current_user_can('edit_posts') ) {
+			$className = ($this->options['dashicons'] === true) ? 'dashicon' : 'image';
+
+			$admin_bar->add_menu(array(
+				'id' => 'jarvis_menubar_icon',
+				'title' => '<span>Jarvis Search</span>',
+				'href' => '#jarvis',
+				'meta' => array(
+					'title' => 'Invoke Jarvis',
+					'class' => $className
+				),
+				'parent' => 'top-secondary'
+			));
+		}
 	}
 
 	public function get_search_results() {
