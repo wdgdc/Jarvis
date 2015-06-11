@@ -1,8 +1,8 @@
 var Jarvis = (function(window, $) {
 	'use strict';
-	
+
 	var jarvis, util;
-	
+
 	util = {
 		// shortcut for creating elements with attributes and innerHTML (not a fan of the jquery way)
 		createElement:function(tag, atts, html) {
@@ -13,7 +13,7 @@ var Jarvis = (function(window, $) {
 		},
 		// returns boolean if page focus is in an editable area
 		inputInFocus:function(e) {
-			return /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || e.target.contentEditable === 'true';		
+			return /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || e.target.contentEditable === 'true';
 		},
 		isJarvisXhr:function(e, jqXHR, settings) {
 			return /action=jarvis-search/.test(settings.url);
@@ -25,13 +25,13 @@ var Jarvis = (function(window, $) {
 		trim:function(str) {
 			return (String.prototype.trim) ? str.trim() : str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 		}
-	}
+	};
 
 	jarvis = function(opts) {
 		var self = this; // closure reference to instance
-		this.settings = {hotkey: 191,separator:'»',loadingimg:'/wp-content/plugins/wp-jarvis/img/wpspin.gif'}; 
+		this.settings = {hotkey: 191,separator:'»',loadingimg:'/wp-content/plugins/wp-jarvis/img/wpspin.gif'};
 		$.extend(this.settings, opts); 	// defaults and extend options
-		
+
 		this.localData = []; // array for storing wordpress links as datums for autocomplete
 		this.modal = util.createElement('div', {id:'jarvis-modal'}); // modal reference
 		this.search = util.createElement('input', {type:'text',id:'jarvis-search'}); // search input reference
@@ -40,10 +40,10 @@ var Jarvis = (function(window, $) {
 		$(this.overlay).on('click', function(e) { // listener for clicking on background
 			self.close(e);
 		});
-		
+
 		// object to store scraped icons from wordpress admin
 		this.icons = {};
-		
+
 		// test if constructor was called after the page is loaded, or on jQuery.ready
 		if (/complete|loaded/.test(document.readyState)) {
 			this.init();
@@ -52,8 +52,8 @@ var Jarvis = (function(window, $) {
 				self.init.call(self, e);
 			});
 		}
-	}
-	
+	};
+
 	jarvis.prototype = {
 		// close method
 		close:function(e) {
@@ -64,26 +64,26 @@ var Jarvis = (function(window, $) {
 		},
 		init:function() {
 			var self = this, option, links, section, node, iconMap, entry;
-			
+
 			// scrape wordpress menu for sidebar links
 			$('#adminmenu a').each(function(i, elem) {
 				var prefix, section, title, slug, sanitize, icon;
-				
+
 				// remove child span element counts from section name
 				sanitize = function(elem) {
 					return $(elem).clone().find('span').remove().end().text();
-				}
-				section = $(this).closest('.menu-top')
-				prefix = sanitize(section.find('a > .wp-menu-name')); 
+				};
+				section = $(this).closest('.menu-top');
+				prefix = sanitize(section.find('a > .wp-menu-name'));
 				title = sanitize(this);
-				
+
 				// Get section icon by calculating live background image and position
 				icon = (function() {
-					var bg = section.find('.wp-menu-image')[0], 
-						img = section.find('.wp-menu-image img')[0], 
-						styles, 
+					var bg = section.find('.wp-menu-image')[0],
+						img = section.find('.wp-menu-image img')[0],
+						styles,
 						classes;
-					
+
 					if (bg && bg.className.indexOf('dashicons-before') > -1) {
 						classes = bg.className.split(' ');
 						classes.splice($.inArray('wp-menu-image', classes), 1);
@@ -101,7 +101,7 @@ var Jarvis = (function(window, $) {
 					} else if (bg) {
 						// icon is background image, possibly sprite (thus the background-position calculation);
 						styles = util.getComputedStyle(bg);
-						if (typeof styles.backgroundPosition === 'string') { // 
+						if (typeof styles.backgroundPosition === 'string') { //
 							return {
 								type: 'image',
 								icon: 'background-image:' + styles.backgroundImage + ';background-position:' + styles.backgroundPosition
@@ -111,27 +111,27 @@ var Jarvis = (function(window, $) {
 								type: 'image',
 								icon: 'background-image:' + styles.backgroundImage + ';background-position-x:'+ styles.backgroundPositionX +';background-position-y:'+ styles.backgroundPositionY
 							};
-						}							
+						}
 					} else {
 						return null;
 					}
 				})();
-								
+
 				// store reference in icons object to match later with types from server
 				self.icons[prefix.toLowerCase()] = icon;
-				
-				
+
+
 				switch(true) {
 					// if prefix is empty or same as title just use the title
 					case prefix === '':
-					case prefix === title: 
-						slug = title; 
+					case prefix === title:
+						slug = title;
 						break;
 					// use the section name and the title for default
 					default:
 						slug = prefix + ' ' + self.settings.separator + ' ' + title;
 				}
-				
+
 				entry = {
 					id: this.id || null,
 					kind: 'href',
@@ -153,10 +153,10 @@ var Jarvis = (function(window, $) {
 						break;
 					}
 				}
-				
+
 				self.localData.push(entry);
 			});
-			
+
 			iconMap = {
 				'attachment':{
 					'image-icon':'media',
@@ -194,13 +194,13 @@ var Jarvis = (function(window, $) {
 					'image-icon':'posts',
 					'dashicon':'dashicons-category'
 				}
-			}
+			};
 			for(var icon in iconMap) {
 				if (iconMap.hasOwnProperty(icon)) {
 					self.icons[icon] = (self.settings.dashicons) ? iconMap[icon] : self.icons[iconMap[icon]['image-icon']];
 				}
 			}
-			
+
 			// Prevent Firefox from using quick search with hotkey
 			if (document.addEventListener) {
 				document.addEventListener('keydown', function(e) {
@@ -210,19 +210,19 @@ var Jarvis = (function(window, $) {
 					}
 				}, true); // use true for event capture
 			}
-			
+
 			// listen for hotkey
 			$(document).on('keyup', function() {
-  				self.keystroke.apply(self, arguments);				
+  				self.keystroke.apply(self, arguments);
 			});
-			
+
 			// resize jarvis window on resize
 			$(window).on('resize', function() {
 				if (self.opened) {
 					self.resize.apply(self, arguments);
 				}
 			});
-			
+
 			// showing spinners
 			$(document).ajaxSend(function(event, jqXHR, settings) {
 				if (self.opened && util.isJarvisXhr.apply(this, arguments)) {
@@ -242,16 +242,16 @@ var Jarvis = (function(window, $) {
 			switch(true) {
 				// handle esc key
 				case this.opened && e.keyCode === 27:
-					this.close(); 
+					this.close();
 					break;
 				// return if editable field is focused
 				case util.inputInFocus(e):
 					return;
 				// open jarvis
-				case !this.opened && e.keyCode === this.settings.hotkey: 
+				case !this.opened && e.keyCode === this.settings.hotkey:
 					this.open();
 					break;
-			}			
+			}
 		},
 		go:function(e, data, type) {
 			location.href = data.href;
@@ -264,7 +264,7 @@ var Jarvis = (function(window, $) {
 			document.body.appendChild(this.overlay);
 			document.body.appendChild(this.modal);
 			this.modal.style.marginLeft = Math.max(-1 * this.modal.offsetWidth / 2) + 'px';
-						
+
 			$(this.search).typeahead([
 				{
 					engine: Hogan,
@@ -280,7 +280,7 @@ var Jarvis = (function(window, $) {
 						'</span>'
 					].join(''),
 					valueKey: 'title'
-				}, 
+				},
 				{
 					engine: Hogan,
 					name: 'remote',
@@ -288,9 +288,10 @@ var Jarvis = (function(window, $) {
 	 				remote: {
 						cache: false,
 						dataType: 'json',
-						filter:function(datums) {
+						filter:function(response) {
+							var datums = response.data;
 							for(var i=0; i<datums.length; i++) {
-	              datums[i].icon = (self.icons[datums[i].type] != undefined ) ? self.icons[datums[i].type] : self.icons['post'];
+								datums[i].icon = (self.icons[datums[i].type] !== undefined ) ? self.icons[datums[i].type] : self.icons.post;
 								datums[i].iconclass = (self.settings.dashicons) ? 'dashicons-before '+ datums[i].icon.dashicon : 'image-icon';
 								datums[i].image = datums[i].icon.icon;
 							}
@@ -313,12 +314,12 @@ var Jarvis = (function(window, $) {
 			]).typeahead('setQuery', '').on('typeahead:selected', function() {
 				self.go.apply(self, arguments);
 			});
-			this.search.focus();			
+			this.search.focus();
 		},
 		resize:function() {
 			this.modal.style.marginLeft = Math.max(-1 * this.modal.offsetWidth / 2) + 'px';
 		}
-	}
-	
+	};
+
 	return jarvis;
 })(this, jQuery);
