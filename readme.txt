@@ -72,3 +72,7 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 = 0.31 =
 * Quick bug fix for icon issue that lead to database results not being shown
+
+= 0.4 =
+* Code maintenance
+* Ability to search by post_id
