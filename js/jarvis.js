@@ -290,7 +290,7 @@ var Jarvis = (function(window, $) {
 						dataType: 'json',
 						filter:function(datums) {
 							for(var i=0; i<datums.length; i++) {
-								datums[i].icon = self.icons[datums[i].type];
+	              datums[i].icon = (self.icons[datums[i].type] != undefined ) ? self.icons[datums[i].type] : self.icons['post'];
 								datums[i].iconclass = (self.settings.dashicons) ? 'dashicons-before '+ datums[i].icon.dashicon : 'image-icon';
 								datums[i].image = datums[i].icon.icon;
 							}

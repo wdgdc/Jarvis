@@ -3,19 +3,17 @@ Contributors: wdgdc
 Plugin Name: Jarvis
 Plugin URI: http://wpjarvis.com
 Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
-Author URI: http://webdevelopmentgroup.com
+Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 0.3
-Version: 0.3
+Stable tag: 0.31
+Version: 0.31
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://webdevelopmentgroup.com
+Donate link: http://www.webdevelopmentgroup.com
 
 Jarvis is your admin assistant, putting WordPress at your fingertips via a quicksearch interface.
-
-Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com), our [web design process](http://www.webdevelopmentgroup.com/services/web-design) and [WordPress development experience](http://www.webdevelopmentgroup.com/services/wordpress-development).
 
 == Description ==
 
@@ -29,6 +27,9 @@ Once Jarvis is installed all you have to do to start using it is hit the quick k
 
 The idea is to make it easier for anyone using the admin side of WordPress to get to the pages they're looking for.
 
+Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com), our [web design process](http://www.webdevelopmentgroup.com/services/web-design) and [WordPress development experience](http://www.webdevelopmentgroup.com/services/wordpress-development).
+
+
 == Installation ==
 
 1.   Upload the plugin folder to the /wp-content/plugins/ directory
@@ -41,7 +42,7 @@ Install using the Plugin Installer.
 
 == Upgrade Notice ==
 
-Version 0.1 was never publically released.
+You'll want to upgrade to this version, I guarantee it.
 
 == Screenshots ==
 
@@ -68,3 +69,6 @@ You may be on a page that's focusing on a text area or input box. If this is the
 = 0.3 =
 * Updated to work with dashicons of WP 3.8+
 * Use search icon instead of J as a more intuitive icon
+
+= 0.31 =
+* Quick bug fix for icon issue that lead to database results not being shown
