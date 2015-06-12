@@ -29,7 +29,7 @@ var Jarvis = (function(window, $) {
 
 	jarvis = function(opts) {
 		var self = this; // closure reference to instance
-		this.settings = {hotkey: 191,separator:'»',loadingimg:'/wp-content/plugins/wp-jarvis/img/wpspin.gif'};
+		this.settings = {keyCode: 191,separator:'»',loadingimg:'/wp-content/plugins/wp-jarvis/img/wpspin.gif'};
 		$.extend(this.settings, opts); 	// defaults and extend options
 
 		this.localData = []; // array for storing wordpress links as datums for autocomplete
@@ -201,17 +201,17 @@ var Jarvis = (function(window, $) {
 				}
 			}
 
-			// Prevent Firefox from using quick search with hotkey
+			// Prevent Firefox from using quick search with keyCode
 			if (document.addEventListener) {
 				document.addEventListener('keydown', function(e) {
-					if (e.keyCode === self.settings.hotkey && !util.inputInFocus(e)) {
+					if (e.keyCode === self.settings.keyCode && !util.inputInFocus(e)) {
 						e.preventDefault();
 						e.stopPropagation();
 					}
 				}, true); // use true for event capture
 			}
 
-			// listen for hotkey
+			// listen for keyCode
 			$(document).on('keyup', function() {
   				self.keystroke.apply(self, arguments);
 			});
@@ -248,7 +248,7 @@ var Jarvis = (function(window, $) {
 				case util.inputInFocus(e):
 					return;
 				// open jarvis
-				case !this.opened && e.keyCode === this.settings.hotkey:
+				case !this.opened && e.keyCode === this.settings.keyCode:
 					this.open();
 					break;
 			}

@@ -17,37 +17,88 @@ class Jarvis {
 		if (empty(self::$_instance)) {
 			self::$_instance = new self();
 		}
-
 		return self::$_instance;
 	}
 
 	private $options = array(
-		'hotkey' => 191,
+		'hotkey' => '/',
+		'keyCode' => 191,
 		'loadingimg' => 'img/wpspin.gif',
 		'dashicons' => false
 	);
-	private $intPageLen = 4;
 
 	private function __construct() {
 		global $wp_version;
 		$this->options['loadingimg'] = plugins_url($this->options['loadingimg'], __FILE__);
 		$this->options['dashicons'] = (version_compare($wp_version, '3.8', '>=')) ? true : false;
 
+		add_action('admin_init', array($this, 'get_user_keycode'));
 		add_action('wp_ajax_jarvis-search', array($this, 'get_search_results'), 1);
 		add_action('admin_enqueue_scripts', array($this, 'enqueue'));
-		//add_action('admin_menu', array($this, 'admin_menu'));
+		add_action('admin_menu', array($this, 'admin_menu'));
 		add_action('admin_footer', array($this, 'init'));
 		add_action('admin_bar_menu', array($this, 'menubar_icon'), 100);
-		add_action('wp_ajax_jarvis_settings', array($this, 'wp_ajax_jarvis_settings'));
-		add_action('admin_init', array($this, 'resigter_jarvis_settings'));
+
+		add_action( 'show_user_profile', array($this, 'add_user_fields') );
+		add_action( 'edit_user_profile', array($this, 'add_user_fields') );
+		add_action( 'personal_options_update', array($this, 'save_user_fields' ) );
+		add_action( 'edit_user_profile_update', array($this, 'save_user_fields' ) );
 
 		$this->site_url = get_site_url();
 	}
 
-	public function resigter_jarvis_settings() {
-		register_setting('jarvis_settings', 'hotkey');
-		register_setting('jarvis_settings', 'results_limit');
+	public function get_user_keycode() {
+		if ($user_keycode = get_user_meta(get_current_user_id(), 'jarvis_keycode', true)) {
+			$this->options['keyCode'] = (int) $user_keycode;
+		}
+		if ($user_hotkey = get_user_meta(get_current_user_id(), 'jarvis_hotkey', true)) {
+			$this->options['hotkey'] = $user_hotkey;
+		}
 	}
+
+	public function add_user_fields( $user ) { ?>
+		<h3>Jarvis</h3>
+
+		<table class="form-table">
+			<tr>
+				<th><label for="jarvis-hotkey">Hotkey</label></th>
+				<td>
+					<p><input type="text" name="jarvis_hotkey" id="jarvis_hotkey" value="<?php echo $this->options['hotkey']; ?>" class="regular-text" autocomplete="off" style="width:25px;text-align:center;" /></p>
+					<p><span class="description">Enter the key you would like to invoke jarvis with. Supports lowercase a-z, 0-9, and any of these special characters: ; = , - . / ` [ \ ] ' only.</span></p>
+					<input type="hidden" id="jarvis_keycode" name="jarvis_keycode" value="<?php echo $this->options['keyCode']; ?>">
+				</td>
+			</tr>
+		</table>
+
+		<script>
+			(function() {
+				var keys = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",";","=",",","-",".","/","`","[","\\","]","'"];
+				var hotkey  = document.getElementById('jarvis_hotkey');
+				var keycode = document.getElementById('jarvis_keycode');
+				var keyup = function(e) {
+					if (keys.indexOf(e.key) > -1) {
+						this.value = this.value.charAt(0).toLowerCase();
+						keycode.value = e.keyCode;
+					} else {
+						this.value = '';
+						keycode.value = '';
+					}
+				}
+				hotkey.addEventListener('keyup', keyup);
+			})();
+		</script>
+	<?php }
+	public function save_user_fields( $user_id ) {
+		if ( current_user_can( 'edit_user', $user_id ) ) {
+			update_user_meta( $user_id, 'jarvis_hotkey', $_POST['jarvis_hotkey'] );
+			update_user_meta( $user_id, 'jarvis_keycode', $_POST['jarvis_keycode'] );
+		}
+	}
+
+	public function jarvis_hotkey_field() { ?>
+		<p><label for="jarvis_hotkey">HotKey</label> <input type="text" id="jarvis_hotkey" name="jarvis_hotkey" maxlength="1" size="1" style="text-align:center"></p>
+		<input type="hidden" id="jarvis_keycode" name="jarvis_keycode">
+	<?php }
 
 	public function enqueue() {
 		if (is_user_logged_in()) {
@@ -72,10 +123,6 @@ class Jarvis {
 
 	public function admin_menu() {
 		add_options_page('Jarvis Options', 'Jarvis', 'administrator', 'jarvis_settings', array($this, 'wp_ajax_jarvis_settings'));
-	}
-
-	public function wp_ajax_jarvis_settings() {
-		include_once('settings.php');
 	}
 
 	public function menubar_icon($admin_bar) {
