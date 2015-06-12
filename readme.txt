@@ -76,3 +76,4 @@ You may be on a page that's focusing on a text area or input box. If this is the
 = 0.4 =
 * Code maintenance
 * Ability to search by post_id
+* add user setting for invoking jarvis
