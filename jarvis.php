@@ -179,7 +179,7 @@ class Jarvis {
 	 * @access private
 	 */
 	private function search_post_id($id = null) {
-		if (!empty((int) $id)) {
+		if (!empty($id)) {
 			$post = get_post($id);
 
 			if (!empty($post)) {
