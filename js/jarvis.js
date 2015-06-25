@@ -37,6 +37,7 @@ var Jarvis = (function(window, $) {
 		this.search = util.createElement('input', {type:'text',id:'jarvis-search'}); // search input reference
 		this.overlay = util.createElement('div', {id:'jarvis-overlay'}); // background reference
 		this.loading = util.createElement('img', {src: this.settings.loadingimg, id:'jarvis-loading'});
+		this.term = '';
 		$(this.overlay).on('click', function(e) { // listener for clicking on background
 			self.close(e);
 		});
@@ -311,10 +312,11 @@ var Jarvis = (function(window, $) {
 					].join(''),
 					valueKey: 'title'
 				}
-			]).typeahead('setQuery', '').on('typeahead:selected', function() {
+			]).on('typeahead:selected', function() {
 				self.go.apply(self, arguments);
-			});
-			this.search.focus();
+			}).on('keyup', function() {
+				self.term = this.value;
+			}).typeahead('setQuery', this.term).focus();
 		},
 		resize:function() {
 			this.modal.style.marginLeft = Math.max(-1 * this.modal.offsetWidth / 2) + 'px';
