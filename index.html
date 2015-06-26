@@ -1,10 +1,173 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
 <head>
-<title>WP Jarvis</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jarvis - A Quicksearch WordPress Plugin for Admins</title>
+<meta name="description" content="Jarvis is a WordPress plugin that acts as your assistant, putting content at your fingertips via a quicksearch interface. Finally a real-world J.A.R.V.I.S.">
+
+<link rel="icon" href="img/favicon.png">
+<!--[if IE]><link rel="shortcut icon" href="img/favicon.ico"><![endif]-->
+
+<link rel="canonical" href="http://wpjarvis.com/">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jarvis - A Quicksearch WordPress Plugin for Admins">
+<meta property="og:description" content="Jarvis is a WordPress plugin that acts as your assistant, putting content at your fingertips via a quicksearch interface. Finally a real-world J.A.R.V.I.S.">
+<meta property="og:url" content="http://wpjarvis.com/">
+<meta property="og:site_name" content="Jarvis">
+<meta property="article:publisher" content="http://facebook.com/i.like.wdg">
+<meta property="og:image" content="images/jarvis.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:description" content="Jarvis is a WordPress plugin that acts as your assistant, putting content at your fingertips via a quicksearch interface. Finally a real-world J.A.R.V.I.S.">
+<meta name="twitter:title" content="Jarvis - A Quicksearch WordPress Plugin for Admins">
+<meta name="twitter:site" content="@wdgtweet">
+<meta name="twitter:domain" content="Jarvis">
+<meta name="twitter:image:src" content="images/jarvis.png">
+<meta name="twitter:creator" content="@wdgtweet">
+
+<link rel='stylesheet' id='bones-stylesheet-css'  href='css/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jarvis-css'  href='css/jarvis.css' type='text/css' media='all' />
+<!--[if lt IE 9]><link rel='stylesheet' id='bones-ie-only-css'  href='css/ie.css' type='text/css' media='all' /><![endif]-->
+
+<script type="text/javascript">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+	__gaTracker('create', 'UA-44783342-1', 'auto');
+	__gaTracker('set', 'forceSSL', true);
+	__gaTracker('send','pageview');
+</script>
 </head>
 
-<body>
-<h1>WP Jarvis</h1>
+<body class="home page page-id-6 page-parent page-template page-template-page-home page-template-page-home-php">
+    <div id="container">
+        <header class="header" role="banner">
+            <div id="inner-header" class="wrap clearfix">
+               <nav role="navigation">
+                   <ul class="clearfix">
+                       <li><a href="#container">Home</a></li>
+                       <li><a href="#demo">Demo</a></li>
+                       <li><a href="#about">About</a></li>
+                       <li><a href="#faq">FAQ</a></li>
+                       <li><a href="#changelog">Changelog</a></li>
+                       <li><a href="#wdg">About WDG</a></li>
+                   </ul>
+               </nav>
+               <h1 id="logo" class="h1"><a href="http://wpjarvis.com" rel="nofollow"><img src="img/jarvis.png" alt="Jarvis"></a></h1>
+               <h2 id="tagline">Jarvis is your admin assistant, putting WordPress at your fingertips via a quicksearch interface.</h2>
+           </div> <!-- end #inner-header -->
+       </header> <!-- end header -->
+       <div id="content">
+           <div id="inner-content" class="wrap clearfix">
+               <div id="main" class="clearfix" role="main">
+                   <div id="demo" class="hidden-padding odd"></div>
+                   <article class="clearfix demo odd post-8 page type-page status-publish hentry">
+                       <header class="article-header">
+                            <h1 class="page-title">Demo</h1>
+                        </header>
+                        <div class="content">
+                            <video src="img/jarvis-preview.mp4" type="video/mp4" autoplay loop></video>
+                            <p><a href="http://downloads.wordpress.org/plugin/jarvis.zip" onclick="__gaTracker('send', 'event', 'download', 'http://downloads.wordpress.org/plugin/jarvis.zip');" class="btn blue">Download</a> <a href="http://wordpress.org/plugins/jarvis/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://wordpress.org/plugins/jarvis/', 'Visit on WordPress');" class="btn">Visit on WordPress</a></p>
+                        </div>
+                    </article>
+                    <div id="about" class="hidden-padding even"></div>
+                    <article class="clearfix about even post-11 page type-page status-publish hentry">
+                        <header class="article-header">
+                            <h1 class="page-title">About</h1>
+                            <h2 class="second-title">What is this thing, anyway?</h2>
+                        </header>
+                        <div class="content">
+                            <p>Let&#8217;s say you&#8217;ve just logged in and you&#8217;re on the dashboard. You want to get to a child page of your about page called &#8220;mission&#8221;, but you can&#8217;t remember if it&#8217;s on page 2 or 5. With Jarvis it&#8217;s simple. Open Jarvis and start typing &#8220;mission&#8221; and your page will show up immediately.</p>
+                            <p>Think of Jarvis as a content management launch bar. Once Jarvis is installed all you have to do to start using it is hit the quick key <code>/</code>, type in your search (eg, &#8220;settings&#8221;) and select the page you&#8217;re looking for. It&#8217;s the fastest way to get from the dashboard to editing your anything on the admin side.</p>
+                            <ul>
+                                <li>Access the settings for permalinks: <code>/</code> + <code>Permalinks</code> + enter and you&#8217;re there. </li>
+                                <li>Edit your contact page: <code>/</code> + <code>Contact</code> + enter and you&#8217;re there.</li>
+                                <li>Access your post about caving in Nigeria from last year: <code>/</code> + <code>Nigeria Caving</code> + enter and you&#8217;re there.</li>
+                            </ul>
+                            <p>The idea is to make it easier for anyone using the admin side of WordPress to get to the pages they&#8217;re looking for. </p>
+                            <a href="img/screenshot-1.png" target="_blank"><img src="img/screenshot-1.png" alt="Starting Jarvis" class="alignnone size-full wp-image-43" data-recalc-dims="1" /></a>
+                            <a href="img/screenshot-2.png" target="_blank"><img src="img/screenshot-2.png" alt="Searching with Jarvis" class="alignnone size-full wp-image-42" data-recalc-dims="1" /></a>
+                        </div>
+                    </article>
+                    <div id="faq" class="hidden-padding odd"></div>
+                    <article class="clearfix faq odd post-22 page type-page status-publish hentry" >
+                        <header class="article-header">
+                            <h1 class="page-title">FAQ</h1>
+                            <h2 class="second-title">Answer my question!</h2>
+                        </header>
+                        <div class="content">
+                            <h3>How do I access Jarvis</h3>
+                            <p>Hit the <code>/</code> key in the admin section or click the Jarvis button in the admin toolbar.</p>
+                            <h3>It&#8217;s still not working&#8230;</h3>
+                            <p>You may be on a page that&#8217;s focusing on a text area or input box. If this is the case just click somewhere on the page outside of these boxes and the hit <code>/</code>.</p>
+                        </div>
+                    </article>
+                    <div id="changelog" class="hidden-padding even"></div>
+                    <article class="clearfix changelog even post-24 page type-page status-publish hentry">
+                        <header class="article-header">
+                            <h1 class="page-title">Changelog</h1>
+                            <h2 class="second-title">What&#039;s the latest?</h2>
+                        </header>
+                        <div class="content">
+                            <h3>v0.3 latest</h3>
+                            <ul>
+                                <li>Compatibility with WordPress 3.8+.</li>
+                                <li>IE8 fix.</li>
+                                <li>Minification.</li>
+                                <li>Compatibility with dashicons.</li>
+                            </ul>
+                            <h3>v0.2</h3>
+                            <ul>
+                                <li>Official initial release.</li>
+                            </ul>
+                            <h3>v0.1</h3>
+                            <ul>
+                                <li>Internal release for testing.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <div id="wdg" class="hidden-padding odd"></div>
+                    <article class="clearfix wdg odd post-26 page type-page status-publish hentry">
+                        <header class="article-header">
+                            <h1 class="page-title">About WDG</h1>
+                            <h2 class="second-title">Who are these crazy guys?</h2>
+                        </header>
+                        <div class="content">
+                            <p><a href="http://www.webdevelopmentgroup.com/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.webdevelopmentgroup.com/', 'Web Development Group');">Web Development Group</a> is an agency in Alexandria, VA that specializes in <a href="http://www.webdevelopmentgroup.com/services/user-experience/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.webdevelopmentgroup.com/services/user-experience/', 'User Experience');">User Experience</a>, <a href="http://www.webdevelopmentgroup.com/services/web-design/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.webdevelopmentgroup.com/services/web-design/', 'Web Design');">Web Design</a> and <a href="http://www.webdevelopmentgroup.com/services/web-development/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.webdevelopmentgroup.com/services/web-development/', 'Web Development');">Web Development</a>. Since we typically use <a href="http://www.webdevelopmentgroup.com/services/wordpress-development/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.webdevelopmentgroup.com/services/wordpress-development/', 'WordPress');">WordPress</a> and <a href="http://www.webdevelopmentgroup.com/services/drupal-development/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.webdevelopmentgroup.com/services/drupal-development/', 'Drupal');">Drupal</a> for our projects, we decided we need to start giving back to those communities in bigger ways. Enter Jarvis! The first of many helpful tools and plugins designed to fill a need we see in the WordPress administration section. </p>
+                            <p>If you like what you see <a href="http://www.webdevelopmentgroup.com/contact/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.webdevelopmentgroup.com/contact/', 'get in touch');">get in touch</a>! </p>
+                        </div>
+                    </article>
+                </div> <!-- end #main -->
+            </div> <!-- end #inner-content -->
+        </div> <!-- end #content -->
+		<footer class="footer" role="contentinfo">
+			<div id="inner-footer" class="wrap clearfix">
+				<nav role="navigation">
+					<ul id="menu-footer-buttons" class="nav footer-nav clearfix">
+                        <li><a href="http://downloads.wordpress.org/plugin/jarvis.zip" onclick="__gaTracker('send', 'event', 'download', 'http://downloads.wordpress.org/plugin/jarvis.zip');">Download</a></li>
+                        <li><a href="https://twitter.com/jarvisbywdg" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://twitter.com/jarvisbywdg', 'Twitter');">Twitter</a></li>
+                        <li><a href="https://github.com/WDGDC/Jarvis/fork" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://github.com/WDGDC/Jarvis/fork', 'Fork');">Fork</a></li>
+                        <li><a href="https://github.com/WDGDC/Jarvis/issues" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://github.com/WDGDC/Jarvis/issues', 'Help Me');">Help Me</a></li>
+                    </ul>
+                </nav>
+				<div class="bottom">
+					<a href="http://www.webdevelopmentgroup.com" title="Jarvis by Web Development Group"><img src="img/footer.png" alt="Jarvis by Web Development Group"></a>
+					<p class="source-org copyright">&copy; <span class="copyright-year">2013</span> <a href="http://webdevelopmentgroup.com">The Web Development Group</a></p>
+				</div>
+    		</div> <!-- end #inner-footer -->
+    	</footer> <!-- end footer -->
+	</div> <!-- end #container -->
+    <script>
+        (function(node, year) {
+            if (!node) return;
+            text = parseInt(node.innerHTML, 10);
+            if (year > text) node.innerHTML = text + ' - ' + year;
+        })(document.querySelector('.copyright-year'), new Date().getFullYear());
+    </script>
 </body>
 </html>

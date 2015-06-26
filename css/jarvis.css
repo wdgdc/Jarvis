@@ -1,26 +1,228 @@
-#jarvis-overlay {position:fixed;top:0;right:0;bottom:0;left:0;background:rgb(0,0,0);opacity:.8;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";z-index:100000;}
-#jarvis-modal {background:rgb(255,255,255);border-radius:.5em;max-width:75%;min-width:50%;padding:1em;position:fixed;left:50%;top:32px;z-index:100001;}
-#jarvis-search,
-#jarvis-modal .tt-hint {background:#ebebeb;border:none;font-size:2em;padding:.5em;width:100%;}
-#jarvis-search.tt-query {background: none !important;}
-#jarvis-modal .tt-hint {color:rgb(150,150,150);}
-#jarvis-modal a {display:block;text-decoration: none;padding:.5em;border:1px solid rgb(255,255,255);}
-.twitter-typeahead {width:100%;}
-.ie8 .twitter-typeahead {background:rgb(235,235,235);}
-.tt-dropdown-menu {background:rgb(255,255,255);border-radius:.5em;padding:1em;margin:0 -1em 0 -1em;width:100%;}
-.tt-suggestion {overflow:hidden;}
-.tt-suggestion p {margin:0;}
-.tt-suggestion a:hover,
-.tt-is-under-cursor a {border-radius:.5em;background:rgb(239, 248, 255);color:rgb(213,78,33);}
-.tt-is-under-cursor a:hover {border-color:rgb(209,218,225);}
-.jarvis-icon {background:url(../../../../wp-includes/images/admin-bar-sprite.png) 0 -100px no-repeat;line-height:28px;width:28px;height:28px;float:left;}
-.jarvis-icon.dashicons-before {background:none;}
-.jarvis-icon.dashicons-before:before {vertical-align:middle;}
-.jarvis-title {display:block;line-height:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.jarvis-thumbnail {float:right;height:28px;width:28px;}
-.jarvis-thumbnail img {display:block;height:28px;width:28px;}
-#wp-admin-bar-jarvis_menubar_icon a {height:20px;width:20px;display:inline-block;overflow:hidden;}
-#wp-admin-bar-jarvis_menubar_icon a span {position:absolute;top:-4em;white-space:nowrap;}
-#wp-admin-bar-jarvis_menubar_icon.image a:before {content:'';height:20px;width:20px;display:inline-block;vertical-align:middle;background:url(../img/jarvis-icon-white.png) center no-repeat;}
-#wp-admin-bar-jarvis_menubar_icon.dashicon a:before {content: "\f179";display: inline-block;width: 20px;height: 20px;font-size: 20px;line-height: 1;font-family: dashicons;text-decoration: inherit;font-weight: 400;font-style: normal;vertical-align: middle;text-align: center;-moz-osx-font-smoothing: grayscale;}
-#jarvis-loading {position:absolute;top:50%;margin-top:-8px;right:20px;}
+@import "../fonts/colfax-thin.css";
+@import "../fonts/colfax-regular.css";
+@import "../fonts/colfax-medium.css";
+body {
+	color: #000;
+	font: 16px/1.8 "Colfax",sans-serif;
+}
+
+code {
+	background: #E9E9E9;
+	padding: 2px 4px;
+}
+a.btn, a.btn:link, a.btn:visited {
+	background: #BFBFBF;
+	-o-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	color: #000;
+	display: inline-block;
+	zoom: 1;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 1;
+	padding: 15px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+a.btn:hover, a.btn:active {
+	background: #e3e3e3;
+	color: #000;
+}
+a.btn.blue, a.btn.blue:link, a.btn.blue:visited {
+	color: #FFF;
+	background: #1294c0;
+}
+a.btn.blue:hover, a.btn.blue:active {
+	color: #FFF;
+	background: #1db1e1;
+}
+
+h1.page-title {
+	font-weight: 300;
+	text-align: center;
+	margin: 0;
+	font-size: 48px;
+	text-transform: uppercase;
+}
+h2.second-title {
+	font-size: 18px;
+	font-weight: 300;
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 30px;
+	text-transform: uppercase;
+}
+
+.header {
+	background: #FF4C47;
+}
+.header .wrap {
+	width: 100%;
+	max-width: 100%;
+	margin: 0;
+}
+.header nav {
+	background: #111;
+	z-index: 999;
+	width: 100%;
+	position: fixed;
+	top: 0;
+}
+.admin-bar .header nav {
+	top:28px;
+}
+.header nav ul {
+	width: 580px;
+	margin: 0 auto;
+}
+.header nav li {
+	float: left;
+}
+.header nav a {
+	color: #FFF;
+	pointer-events: auto;
+	text-decoration: none;
+	font-weight: 500;
+	padding: 20px 20px 10px 20px;
+	display: block;
+}
+.header nav a:hover {
+	background: #FFF;
+	color: #000;
+}
+#logo {
+	width: 626px;
+	margin: 100px auto 30px auto;
+}
+#tagline {
+	width: 636px;
+	margin: 0 auto 60px auto;
+	font: 30px/1.1 "Colfax",sans-serif;
+	font-weight: 300;
+	text-transform: uppercase;
+	color: #FFF;
+	text-align: center;
+}
+#content:before {
+	content: " ";
+	background: url(../img/arrow.png) center top no-repeat;
+	width: 98px;
+	height: 28px;
+	display: block;
+	margin: 0 auto;
+}
+#content {
+	margin-top: 0;
+}
+#content > .wrap {
+	width: 100%;
+	max-width: 100%;
+}
+.article-header, .content {
+	width: 460px;
+	margin: 0 auto;
+}
+.article-header {
+	padding-top: 50px;
+}
+.hidden-padding {
+	padding-bottom: 50px;
+}
+.hidden-padding.odd {
+	background: #F4F4F4;
+}
+article.even {
+	background: #F4F4F4;
+}
+#main .odd:first-child {
+	background: transparent;
+}
+.even h3 {
+	color: #FF4C47;
+}
+.odd h3 {
+	color: #1294c0;
+}
+#main img {
+	max-width: 460px;
+	height: auto;
+}
+#main article:last-child {
+	padding-bottom: 50px;
+}
+#main article ul {
+	list-style: square;
+	margin: 5px 0 0 1em;
+	line-height: 1.4;
+}
+#main article ol {
+	list-style: decimal;
+	margin: 5px 0 0 1em;
+}
+#main article li {
+	margin: 0 0 10px 1em;
+}
+.demo h1.page-title {
+	display: none;
+}
+.demo .btn {
+	width: 49%;
+	text-align: center;
+}
+
+#menu-footer-buttons {
+	background: transparent;
+	width: 830px;
+	margin: 0 auto;
+}
+#menu-footer-buttons li {
+	margin: 3%;
+}
+#menu-footer-buttons a {
+	background: #1294C0;
+	color: #FFF;
+	text-transform: uppercase;
+	font-weight: 500;
+	font-size: 16px;
+	-o-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	padding: 10px 40px;
+}
+#menu-footer-buttons a:hover {
+	color: #FFF;
+	background: #1db1e1;
+}
+#inner-footer {
+	width: 100%;
+	margin: 0;
+}
+footer .bottom {
+	background: #111;
+	padding: 30px 0;
+}
+footer .bottom img {
+	width: 469px;
+	margin: 0 auto;
+	display: block;
+}
+footer .copyright {
+	color: #FFF;
+	text-align:center;
+}
+footer #inner-footer .bottom a, footer #inner-footer .bottom a:visited {
+	text-decoration: underline;
+	color: #FFF;
+}
+footer #inner-footer .bottom a:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+.wrap {
+	max-width: 100%;
+}
