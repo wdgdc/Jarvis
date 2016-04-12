@@ -6,9 +6,9 @@ Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 3.3
-Tested up to: 3.9.1
+Tested up to: 4.2.2
 Stable tag: 0.31
-Version: 0.31
+Version: 0.40
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.webdevelopmentgroup.com
@@ -72,3 +72,11 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 = 0.31 =
 * Quick bug fix for icon issue that lead to database results not being shown
+
+= 0.40 =
+* Code maintenance
+* Ability to search by post_id
+* add user setting for invoking jarvis
+
+= 0.50.0 =
+* Refactored to use the latest Twitter Typeahead
