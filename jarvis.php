@@ -3,7 +3,7 @@
 Plugin Name:	Jarvis
 Plugin URI:		http://www.wpjarvis.com
 Description:	Jarvis is your administration assistant, putting WordPress at your fingertips.
-Version:		0.40
+Version:		0.50.0
 Author:			wdgdc, David Everett, Joan Piedra, Kurtis Shaner
 Author URI:		http://www.webdevelopmentgroup.com
 License:		GPLv2 or later
@@ -34,7 +34,6 @@ class Jarvis {
 
 		add_action('admin_bar_menu', array($this, 'menubar_icon'), 100);
 		add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-		add_action('admin_footer', array($this, 'admin_footer'));
 		add_action('admin_init', array($this, 'admin_init'));
 		add_action('edit_user_profile', array($this, 'show_user_profile'));
 		add_action('edit_user_profile_update', array($this, 'edit_user_profile_update'));
@@ -130,27 +129,12 @@ class Jarvis {
 	public function admin_enqueue_scripts() {
 		if (is_user_logged_in()) {
 			wp_enqueue_style('wp-jarvis', plugins_url('css/jarvis.css', __FILE__));
-			wp_register_script('typeahead', plugins_url('js/typeahead.min.js', __FILE__), array('jquery'), '0.9.3');
-			wp_register_script('hogan', plugins_url('js/hogan.min.js', __FILE__), null, '2.0.0');
-			wp_enqueue_script('wp-jarvis', plugins_url('js/jarvis.js', __FILE__), array('jquery', 'typeahead', 'hogan'), '.1');
+			wp_register_script('typeahead', plugins_url('dist/typeahead/typeahead.bundle.min.js', __FILE__), array('jquery'));
+			wp_register_script('hogan', plugins_url('dist/hogan/hogan-3.0.2.min.js', __FILE__), null, '3.0.2');
+			wp_enqueue_script('wp-jarvis', plugins_url('dist/jarvis.min.js', __FILE__), array('jquery', 'typeahead', 'hogan'), '0.50.0');
+			wp_localize_script('wp-jarvis', 'jarvisOptions', $this->options);
 		}
 	}
-
-	/**
-	 * Initialize Jarvis in wp-footer
-	 *
-	 * @access public
-	 * @action admin_footer
-	 */
-	public function admin_footer() { ?>
-		<script>
-			var wp = wp || {};
-			wp.jarvis = new Jarvis(<?php echo json_encode($this->options); ?>);
-			jQuery("#wp-admin-bar-jarvis_menubar_icon a").on("click", function(e) {
-				wp.jarvis.open(e);
-			});
-		</script>
-	<?php }
 
 	/**
 	 * Add Jarvis to the menu bar as a search icon

@@ -1,0 +1,21 @@
+{
+  "browser": true,
+  "camelcase": false,
+  "curly": true,
+  "devel": true,
+  "eqeqeq": true,
+  "forin": true,
+  "jquery": true,
+  "immed": true,
+  "nonbsp": true,
+  "quotmark": "single",
+  "undef": true,
+  "unused": "vars",
+  "trailing": true,
+  "smarttabs": true,
+  "esversion": 6,
+  "globals": {
+      "require": true,
+      "__dirname": true
+  }
+}
