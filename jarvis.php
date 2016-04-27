@@ -3,7 +3,7 @@
 Plugin Name:	Jarvis
 Plugin URI:		http://www.wpjarvis.com
 Description:	Jarvis is your administration assistant, putting WordPress at your fingertips.
-Version:		0.50.0
+Version:		0.51.0
 Author:			wdgdc, David Everett, Joan Piedra, Kurtis Shaner
 Author URI:		http://www.webdevelopmentgroup.com
 License:		GPLv2 or later
@@ -40,6 +40,7 @@ class Jarvis {
 		add_action('personal_options_update', array($this, 'edit_user_profile_update'));
 		add_action('show_user_profile', array($this, 'show_user_profile'));
 		add_action('wp_ajax_jarvis-search', array($this, 'get_search_results'), 1);
+
 	}
 
 	/**
@@ -230,6 +231,8 @@ class Jarvis {
 		$srch_qry = $wpdb->esc_like($_REQUEST['q']);
 		$srch_escaped_spaces = '%'.str_replace(' ', '%', $srch_qry).'%';
 
+		$post_types = "'".implode("','", array_values(get_post_types(array('show_ui' => true))))."'";
+
 		$strQry = "SELECT
 				$wpdb->terms.term_id as 'id',
 				$wpdb->terms.`name` as 'title',
@@ -263,6 +266,8 @@ class Jarvis {
 				$wpdb->posts
 			WHERE
 				$wpdb->posts.post_status NOT IN ('revision', 'auto-draft') AND $wpdb->posts.post_type <> 'revision'
+			AND
+				$wpdb->posts.post_type IN ($post_types)
 			AND (
 				$wpdb->posts.post_title LIKE %s
 				OR
