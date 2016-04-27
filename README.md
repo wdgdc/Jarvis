@@ -53,6 +53,8 @@ You may be on a page that's focusing on a text area or input box. If this is the
   * add user setting for invoking jarvis
 6. 0.50.0
   * Refactored to use the latest Twitter Typeahead
+7. 0.51.0
+  * Add post type check to search query to only query post types shown in wp-admin
 
 
 ## Authors

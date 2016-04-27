@@ -6,9 +6,9 @@ Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 3.3
-Tested up to: 4.5
-Stable tag: 0.50.0
-Version: 0.50.0
+Tested up to: 4.5.1
+Stable tag: 0.51.0
+Version: 0.51.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.webdevelopmentgroup.com
@@ -80,3 +80,6 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 = 0.50.0 =
 * Refactored to use the latest Twitter Typeahead
+
+= 0.51.0 =
+* Add post type check to search query to only query post types shown in wp-admin
