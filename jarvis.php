@@ -298,5 +298,6 @@ class Jarvis {
 	}
 }
 
-add_action( 'plugins_loaded', array( 'Jarvis', 'get_instance' ) );
-?>
+if ( is_admin() ) {
+	add_action( 'plugins_loaded', array( 'Jarvis', 'get_instance' ) );
+}
