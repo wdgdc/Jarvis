@@ -1,6 +1,6 @@
 /**
  * jarvis -  Jarvis is your admin assistant, putting WordPress at your fingertips via a quicksearch interface.
- * @version v0.50.0
+ * @version v0.51.0
  * @link https://github.com/WDGDC/Jarvis#readme
  * @license MIT
  */
@@ -299,7 +299,7 @@ Jarvis.prototype = {
         this.modal.appendChild(this.search);
         document.body.appendChild(this.overlay);
         document.body.appendChild(this.modal);
-        this.modal.style.marginLeft = Math.ceil(-1 * this.modal.offsetWidth / 2) + 'px';
+		this.modal.style.marginLeft = Math.ceil(-1 * this.modal.offsetWidth / 2) + 'px';
 
         $(this.search).typeahead({
                 hint: true,
@@ -315,7 +315,7 @@ Jarvis.prototype = {
                     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
                     remote: {
-                        url: window.ajaxurl + '?action=jarvis-search&q=%s',
+                        url: window.ajaxurl + '?action=jarvis-search&q=%s&nonce=' + this.settings.nonce,
                         wildcard: '%s',
                         transform: function(response) {
                             return response.data.map(function(data) {
@@ -344,7 +344,7 @@ Jarvis.prototype = {
     }
 };
 
-window.jarvis = new Jarvis(options);
+window.Jarvis = Jarvis;
 
 
 })(this, window.jQuery, window.jarvisOptions, window.Bloodhound, window.Hogan);

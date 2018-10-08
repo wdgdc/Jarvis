@@ -31,6 +31,7 @@ class Jarvis {
 		global $wp_version;
 		$this->options['loadingimg'] = plugins_url($this->options['loadingimg'], __FILE__);
 		$this->options['dashicons'] = (version_compare($wp_version, '3.8', '>=')) ? true : false;
+		$this->options['nonce'] = wp_create_nonce( 'jarvis-search' );
 
 		add_action('admin_bar_menu', array($this, 'menubar_icon'), 100);
 		add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
@@ -133,7 +134,7 @@ class Jarvis {
 			wp_register_script('typeahead', plugins_url('dist/typeahead/typeahead.bundle.min.js', __FILE__), array('jquery'));
 			wp_register_script('hogan', plugins_url('dist/hogan/hogan-3.0.2.min.js', __FILE__), null, '3.0.2');
 			wp_enqueue_script('wp-jarvis', plugins_url('dist/jarvis.min.js', __FILE__), array('jquery', 'typeahead', 'hogan'), '0.50.0');
-			wp_localize_script('wp-jarvis', 'jarvisOptions', $this->options);
+			wp_add_inline_script( 'wp-jarvis', 'window.jarvis = new Jarvis('. wp_json_encode( $this->options ) .');', 'after' );
 		}
 	}
 
@@ -219,11 +220,15 @@ class Jarvis {
 	 */
 
 	public function get_search_results() {
-	    global $wpdb;
+		global $wpdb;
 
 		// Don't break the json if debug is off
 		if (!defined('WP_DEBUG') || !WP_DEBUG) {
 			error_reporting(0);
+		}
+
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'jarvis-search' ) ) {
+			wp_send_json_error( 'invalid nonce' );
 		}
 
 		$_REQUEST['q'] = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
@@ -293,7 +298,5 @@ class Jarvis {
 	}
 }
 
-if (is_admin()) {
-	Jarvis::get_instance();
-}
+add_action( 'plugins_loaded', array( 'Jarvis', 'get_instance' ) );
 ?>
