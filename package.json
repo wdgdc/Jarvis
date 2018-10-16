@@ -33,7 +33,6 @@
     "gulp-uglify": "^3.0.1"
   },
   "dependencies": {
-    "hogan.js": "^3.0.2",
     "typeahead.js": "^0.11.1"
   }
 }

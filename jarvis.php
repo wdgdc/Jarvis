@@ -12,6 +12,8 @@ Text Domain:	jarvis
 
 class Jarvis {
 
+	const VERSION = '0.51.0';
+
 	private static $_instance;
 	public static function get_instance() {
 		if (empty(self::$_instance)) {
@@ -29,8 +31,9 @@ class Jarvis {
 
 	private function __construct() {
 		global $wp_version;
+
 		$this->options['loadingimg'] = plugins_url($this->options['loadingimg'], __FILE__);
-		$this->options['dashicons'] = (version_compare($wp_version, '3.8', '>=')) ? true : false;
+		$this->options['dashicons'] = ( version_compare($wp_version, '3.8', '>=' ) ) ? true : false;
 		$this->options['nonce'] = wp_create_nonce( 'jarvis-search' );
 
 		add_action('admin_bar_menu', array($this, 'menubar_icon'), 100);
@@ -41,7 +44,6 @@ class Jarvis {
 		add_action('personal_options_update', array($this, 'edit_user_profile_update'));
 		add_action('show_user_profile', array($this, 'show_user_profile'));
 		add_action('wp_ajax_jarvis-search', array($this, 'get_search_results'), 1);
-
 	}
 
 	/**
@@ -57,6 +59,18 @@ class Jarvis {
 		if ($user_hotkey = get_user_meta(get_current_user_id(), 'jarvis_hotkey', true)) {
 			$this->options['hotkey'] = $user_hotkey;
 		}
+
+		// this code allows us to determine the post type icon for custom post types that have a dashicon specified
+		$post_types = array_filter( get_post_types( [ 'show_ui' => true ], 'objects' ), function( $post_type ) {
+			return ! empty( $post_type->menu_icon );
+		} );
+
+		$this->options['icons'] = array_combine( array_keys( $post_types ), array_map( function( $post_type ) {
+			return [
+				'type' => 'dashicon',
+				'icon' => $post_type->menu_icon
+			];
+		}, $post_types ) );
 	}
 
 	/**
@@ -84,9 +98,11 @@ class Jarvis {
 				var hotKey  = document.getElementById('jarvis_hotkey');
 				var keyCode = document.getElementById('jarvis_keycode');
 				var keys = {
-					"0":48,"1":49,"2":50,"3":51,"4":52,"5":53,"6":54,"7":55,"8":56,"9":57,"a":65,"b":66,"c":67,"d":68,"e":69,"f":70,
-					"g":71,"h":72,"i":73,"j":74,"k":75,"l":76,"m":77,"n":78,"o":79,"p":80,"q":81,"r":82,"s":83,"t":84,"u":85,"v":86,
-					"w":87,"x":88,"y":89,"z":90,";":186,"=":187,",":188,"-":189,".":190,"/":191,"`":192,"[":219,"\\":220,"]":221,"'":222
+					"0":48,"1":49,"2":50,"3":51,"4":52,"5":53,"6":54,"7":55,"8":56,"9":57,
+					"a":65,"b":66,"c":67,"d":68,"e":69,"f":70,"g":71,"h":72,"i":73,"j":74,
+					"k":75,"l":76,"m":77,"n":78,"o":79,"p":80,"q":81,"r":82,"s":83,"t":84,
+					"u":85,"v":86,"w":87,"x":88,"y":89,"z":90,";":186,"=":187,",":188,"-":189,
+					".":190,"/":191,"`":192,"[":219,"\\":220,"]":221,"'":222
 				};
 				var keyCodes = [];
 				for(var key in keys) {
@@ -129,13 +145,11 @@ class Jarvis {
 	 * @action admin_enqueue_scripts
 	 */
 	public function admin_enqueue_scripts() {
-		if (is_user_logged_in()) {
-			wp_enqueue_style('wp-jarvis', plugins_url('css/jarvis.css', __FILE__));
-			wp_register_script('typeahead', plugins_url('dist/typeahead/typeahead.bundle.min.js', __FILE__), array('jquery'));
-			wp_register_script('hogan', plugins_url('dist/hogan/hogan-3.0.2.min.js', __FILE__), null, '3.0.2');
-			wp_enqueue_script('wp-jarvis', plugins_url('dist/jarvis.min.js', __FILE__), array('jquery', 'typeahead', 'hogan'), '0.50.0');
-			wp_add_inline_script( 'wp-jarvis', 'window.jarvis = new Jarvis('. wp_json_encode( $this->options ) .');', 'after' );
-		}
+		wp_enqueue_style( 'wp-jarvis', plugins_url( 'dist/jarvis.css', __FILE__ ), [], self::VERSION, 'screen' );
+		wp_register_script( 'typeahead', plugins_url( 'dist/vendor/typeahead.js/dist/typeahead.bundle.min.js', __FILE__ ), array( 'jquery' ), self::VERSION );
+		wp_enqueue_script( 'wp-jarvis', plugins_url( 'dist/jarvis.js', __FILE__), array( 'jquery', 'underscore', 'typeahead' ), self::VERSION );
+
+		wp_add_inline_script( 'wp-jarvis', 'window.jarvis = new Jarvis('. wp_json_encode( $this->options ) .');', 'after' );
 	}
 
 	/**
