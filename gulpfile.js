@@ -1,65 +1,85 @@
-var package      = require('./package.json');
-var gulp         = require('gulp');
-var concat       = require('gulp-concat');
-var uglify       = require('gulp-uglify');
-var header       = require('gulp-header');
-var insert       = require('gulp-insert');
+const package      = require('./package.json');
+const nodePath     = require('path');
 
-var banner = [
-  '/**',
-  ' * <%= pkg.name %> - <%= pkg.description %>',
-  ' * @version v<%= pkg.version %>',
-  ' * @link <%= pkg.homepage %>',
-  ' * @license <%= pkg.license %>',
-  ' */',
-  '',
-  ''
-].join('\n');
+const autoprefixer = require('gulp-autoprefixer');
+const babel        = require('gulp-babel');
+const concat       = require('gulp-concat');
+const gulp         = require('gulp');
+const header       = require('gulp-header');
+const insert       = require('gulp-insert');
+const sass         = require('gulp-sass');
+const sassGlob     = require('gulp-sass-glob');
+const sourcemaps   = require('gulp-sourcemaps');
+const uglify       = require('gulp-uglify');
 
-var dist = __dirname + '/dist';
+const project = {
+	root: nodePath.posix.normalize(__dirname)
+};
 
-gulp.task('vendor', function() {
-    gulp.src('node_modules/hogan.js/dist/*.js').pipe(gulp.dest(dist + '/hogan'));
-    gulp.src('node_modules/typeahead.js/dist/*.js').pipe(gulp.dest(dist + '/typeahead'));
-});
+project.node   = nodePath.posix.normalize(`${project.root}/node_modules`);
+project.src    = nodePath.posix.normalize(`${project.root}/src`);
+project.js     = nodePath.posix.normalize(`${project.src}/js`);
+project.scss   = nodePath.posix.normalize(`${project.src}/scss`);
+project.dist   = nodePath.posix.normalize(`${project.root}/dist`);
+project.vendor = nodePath.posix.normalize(`${project.dist}/vendor`);
 
-gulp.task('js', function() {
-    gulp.src([
-        __dirname + '/src/util.js',
-        __dirname + '/src/jarvis.js'
-    ])
-        .pipe(concat('jarvis.js'))
-        .pipe(insert.wrap('(function(window, $, options, Bloodhound, Hogan) {\n\n', '\n\n})(this, window.jQuery, window.jarvisOptions, window.Bloodhound, window.Hogan);'))
-        .pipe(header(banner, { pkg : package } ))
-        .pipe(gulp.dest(dist));
-});
+const banner = `/**
+ * <%= package.name %> - <%= package.description %>
+ * @version v<%= package.version %>
+ * @link <%= package.homepage %>
+ * @license <%= package.license %>
+ */
 
-gulp.task('uglify', function() {
-    var pipe = gulp.src(dist + '/jarvis.js')
-        .pipe(uglify({
-            preserveComments: 'license'
-        }).on('error', function(err) {
-            console.error(err);
-        }))
-        .pipe(concat('jarvis.min.js'))
-        .pipe(gulp.dest(dist));
+`;
 
-        return pipe;
-});
+const js = () => {
+	return gulp.src( `${project.js}` + '/**/*.js' )
+		.pipe( sourcemaps.init() )
+		.pipe( concat( 'jarvis.js' ) )
+		.pipe( babel( {
+			presets: [
+				[
+					'@babel/preset-env',
+					{
+						"useBuiltIns": "entry"
+					}
+				]
+			]
+		} ) )
+		.pipe( insert.wrap( '(function() {\n\n', '\n\n})();' ) )
+		.pipe( uglify() )
+		.pipe( header( banner, { package: package } ) )
+		.pipe( sourcemaps.write('.') )
+		.pipe( gulp.dest( project.dist ) );
+}
 
-gulp.task('build', [
-    'vendor',
-    'js',
-    'uglify'
-]);
+const scss = () => {
+	return gulp.src( [`${project.scss}/**/*.scss`, `!_*.scss`] )
+		.pipe( sourcemaps.init() )
+		.pipe( sassGlob() )
+		.pipe( sass( {
+			outputStyle: 'expanded'
+		} ).on( 'error', sass.logError ) )
+		.pipe( autoprefixer() )
+		.pipe( header( banner, { package: package } ) )
+		.pipe( sourcemaps.write('.') )
+		.pipe( gulp.dest( project.dist ) );
+}
 
-gulp.task('watch', function() {
-    gulp.watch(__dirname + '/templates/*.hbs', ['templates']);
-    gulp.watch(__dirname + '/src/*.js', ['js']);
-    gulp.watch(dist + '/jarvis.js', ['uglify']);
-});
+const vendor = () => {
+	const npmFiles = Object.keys(package.dependencies).map((name) => `${project.node}/${name}/**/*`);
 
-gulp.task('default', [
-    'build',
-    'watch'
-]);
+	return gulp.src(npmFiles, { base: project.node })
+		.pipe(gulp.dest(project.vendor));
+}
+
+const watch = () => {
+	gulp.watch( `${project.js}` + '/**/*.js', js );
+	gulp.watch( `${project.scss}` + '/**/*.scss', scss );
+}
+
+const build = gulp.parallel( vendor, js, scss );
+
+gulp.task( 'build', build );
+gulp.task( 'watch', watch );
+gulp.task( 'default', gulp.series( build, watch ) );
