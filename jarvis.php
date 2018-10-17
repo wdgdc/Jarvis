@@ -257,7 +257,9 @@ class Jarvis {
 				break;
 		}
 
-		return $result;
+		$result->title = apply_filters( 'the_title', $result->title, $result->id );
+
+		return apply_filters( 'jarvis_normalize', $result );
 	}
 
 	/**
@@ -279,12 +281,15 @@ class Jarvis {
 			wp_send_json_error( 'invalid nonce' );
 		}
 
-		$_REQUEST['q'] = isset( $_REQUEST['q'] ) ? $_REQUEST['q'] : '';
+		$query = ( isset( $_REQUEST['q'] ) ) ? wp_unslash( $_REQUEST['q'] ) : '';
+		$query_esc_like = $wpdb->esc_like( $_REQUEST['q'] );
+		$query_esc_like_spaces = '%' . str_replace( ' ', '%', $query_esc_like ) . '%';
 
-		$srch_qry = $wpdb->esc_like( $_REQUEST['q'] );
-		$srch_escaped_spaces = '%' . str_replace( ' ', '%', $srch_qry ) . '%';
+		$post_types = apply_filters( 'jarvis_include_post_types', array_values( get_post_types( [ 'show_ui' => true ] ) ) );
+		$post_types_sql = "'" . implode( "','", $post_types ) . "'";
 
-		$post_types = "'" . implode( "','", array_values( get_post_types( array( 'show_ui' => true ) ) ) ) . "'";
+		$post_stati_exclude = apply_filters( 'jarvis_exclude_post_statuses', [ 'revision', 'auto-draft', 'trash' ] );
+		$post_stati_exclude_sql = "'" . implode( "','", $post_stati_exclude ) . "'";
 
 		$strQry = "SELECT
 				$wpdb->terms.term_id as 'id',
@@ -318,9 +323,9 @@ class Jarvis {
 			FROM
 				$wpdb->posts
 			WHERE
-				$wpdb->posts.post_status NOT IN ('revision', 'auto-draft', 'trash')
+				$wpdb->posts.post_status NOT IN ($post_stati_exclude_sql)
 			AND
-				$wpdb->posts.post_type IN ($post_types)
+				$wpdb->posts.post_type IN ($post_types_sql)
 			AND (
 				$wpdb->posts.post_title LIKE %s
 				OR
@@ -350,18 +355,20 @@ class Jarvis {
 		";
 
 		$sql_prepared = array(
-			$srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry,
-			$srch_escaped_spaces, $srch_escaped_spaces,
-			$srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry,
-			$srch_escaped_spaces, $srch_escaped_spaces,
-			$srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry,
-			$srch_escaped_spaces, $srch_escaped_spaces, $srch_escaped_spaces
+			$query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like,
+			$query_esc_like_spaces, $query_esc_like_spaces,
+			$query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like,
+			$query_esc_like_spaces, $query_esc_like_spaces,
+			$query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like,
+			$query_esc_like_spaces, $query_esc_like_spaces, $query_esc_like_spaces
 		);
 
 		$this->results = $wpdb->get_results( $wpdb->prepare( $strQry, $sql_prepared ) );
 
 		$this->search_post_id( $_REQUEST['q'] );
 		$this->results = array_map( array( $this, 'normalize' ), $this->results );
+
+		$this->results = apply_filters( 'jarvis_results', $this->results, $query );;
 
 		wp_send_json_success( $this->results );
 	}
