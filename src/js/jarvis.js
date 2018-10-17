@@ -11,8 +11,6 @@ class Jarvis {
 		// default settings
 		this.settings = jQuery.extend( {
 			keyCode: 191,
-			separator:'»',
-			loadingimg:'/wp-content/plugins/wp-jarvis/img/wpspin.gif',
 			icons: {},
 		}, options );
 
@@ -32,24 +30,33 @@ class Jarvis {
 		// the current search term to re-open the modal with the same term
 		this.term = '';
 
+		// flag for whether the ctrlKey is currently pressed
+		this.ctrlKey = false;
+
+		this.node = document.createElement( 'div' );
+		this.node.className = `jarvis jarvis--${this.settings.theme}`;
+		this.node.id = 'jarvis';
+
 		// modal node
-		this.modal = document.createElement('div');
-		this.modal.id = 'jarvis-modal';
+		this.modal = document.createElement( 'div' );
+		this.modal.className = 'jarvis__modal';
 
 		// modal overlay node
 		this.overlay = document.createElement( 'div' );
-		this.overlay.id = 'jarvis-overlay';
-		this.overlay.addEventListener( 'click', () => this.close(), true);
+		this.overlay.className = 'jarvis__overlay';
+		this.overlay.addEventListener( 'click', () => this.close(), true );
 
 		// search input node
-		this.search = document.createElement('input');
+		this.search = document.createElement( 'input' );
 		this.search.type = 'text';
-		this.search.id = 'jarvis-search';
+
+		this.modal.appendChild( this.search );
+		this.node.appendChild( this.modal );
+		this.node.appendChild( this.overlay );
 
 		// loading icon node
-		this.loading     = document.createElement('img');
-		this.loading.src = this.settings.loadingimg;
-		this.loading.id  = 'jarvis-loading';
+		this.loading    = document.createElement( 'span' );
+		this.loading.className = 'jarvis__loading';
 
 		// underscore template for suggestion
 		this.templates = {
