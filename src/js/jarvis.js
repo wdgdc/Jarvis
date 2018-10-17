@@ -71,127 +71,155 @@ class Jarvis {
 		};
 
 		// function for determining if the quick key should fire
-		this.inputFocused = function(e) {
-			return /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || e.target.contentEditable === 'true';
+		this.inputFocused = function( e ) {
+			return /INPUT|SELECT|TEXTAREA/.test( e.target.tagName ) || e.target.contentEditable === 'true';
 		}
 
 		// does the url argument match the jarvis-search action
-		this.isJarvisUrl = function(url) {
-			return /action=jarvis-search/.test(url);
+		this.isJarvisUrl = function( url ) {
+			return /action=jarvis-search/.test( url );
 		}
 
 		// test if constructor was called after the page is loaded, or on DOMContentLoaded
 		if ( /complete|loaded/.test( document.readyState ) ) {
 			this.init();
 		} else {
-			document.addEventListener( 'DOMContentLoaded', this.init.bind(this) );
+			document.addEventListener( 'DOMContentLoaded', this.init.bind( this ) );
 		}
 	}
 
 	init() {
 		// scrape wordpress menu for sidebar links
-		jQuery('#adminmenu a').each( (i, elem) => {
-			this.localData.push( new JarvisSuggestionMenu(elem) );
+		jQuery( '#adminmenu a' ).each( ( i, elem ) => {
+			this.localData.push( new JarvisSuggestionMenu( elem ) );
 			return;
-		});
+		} );
 
 		// Prevent Firefox from using quick search with keyCode
-		document.addEventListener( 'keydown', (e) => {
-			if ( e.keyCode === this.settings.keyCode && ! this.inputFocused(e)) {
+		document.addEventListener( 'keydown', ( e ) => {
+			if ( e.keyCode === this.settings.keyCode && ! this.inputFocused( e ) ) {
 				e.preventDefault();
 				e.stopPropagation();
 			}
-		}, true); // use true for event capture
+		}, true ); // use true for event capture
 
 		// menu bar icon click
-		jQuery(document).on( 'click', '#wp-admin-bar-jarvis_menubar_icon a', (e) => {
+		jQuery( document ).on( 'click', '#wp-admin-bar-jarvis_menubar_icon a', ( e ) => {
 			e.preventDefault();
 			this.open();
 		} );
 
-		// listen for keyCode
-		jQuery(document).on( 'keyup', (e) => {
-			e.preventDefault();
-			e.stopPropagation();
-			switch(true) {
-				// handle esc key
-				case this.opened && e.keyCode === 27:
-					this.close();
-					break;
-				// return if editable field is focused
-				case util.inputInFocus(e):
-					return;
-				// open jarvis
-				case !this.opened && e.keyCode === this.settings.keyCode:
-					this.open();
-					break;
+		// let the typeahead:selected event handle ctrl+click so it's consistent with keyboard ctrl+enter
+		jQuery( document ).on( 'click', '.tt-suggestion a', ( e ) => {
+			if ( e.ctrlKey === true ) {
+				e.preventDefault();
 			}
-		});
+		} );
+
+		// record the ctrlKey status so we can use it in typeaheads custom triggered events
+		jQuery( document ).on( 'keydown keyup', '#jarvis-search', ( e ) => {
+			this.ctrlKey = e.ctrlKey;
+		} );
+
+		// listen for keyCode
+		jQuery( document ).on( 'keyup', ( e ) => {
+			// handle esc key - must go before inputFocused check so we can close when jarvis search is focused
+			if ( this.opened && e.keyCode === 27 ) {
+				e.preventDefault();
+				e.stopPropagation();
+				this.close();
+				return;
+			}
+
+			// return if editable field is focused
+			if ( this.inputFocused( e ) ) {
+				return;
+			}
+
+			// open jarvis
+			if ( ! this.opened && e.keyCode === this.settings.keyCode ) {
+				e.preventDefault();
+				e.stopPropagation();
+				this.open();
+				return;
+			}
+		} );
 
 		// resize jarvis window on resize
-		jQuery(window).on('resize', this.resize.bind(this) );
+		jQuery( window ).on( 'resize', this.resize.bind( this ) );
 
 		// showing spinners
-		jQuery(document).ajaxSend( ( event, jqXHR, settings ) => {
-			if (this.opened && this.isJarvisUrl( settings.url ) ) {
-				this.modal.appendChild(this.loading);
+		jQuery( document ).ajaxSend( ( event, jqXHR, settings ) => {
+			if ( this.opened && this.isJarvisUrl( settings.url ) ) {
+				this.modal.appendChild( this.loading );
 			}
-		});
+		} );
 
 		// hiding spinners
-		jQuery(document).ajaxComplete( (event, jqXHR, settings) => {
-			if (this.opened && this.isJarvisUrl( settings.url ) ) {
-				this.loading.parentNode.removeChild(this.loading);
+		jQuery( document ).ajaxComplete( ( event, jqXHR, settings ) => {
+			if ( this.opened && this.isJarvisUrl( settings.url ) ) {
+				this.loading.parentNode.removeChild( this.loading );
 			}
-		});
+		} );
 	}
 
 	open() {
 		this.opened = true;
-		this.modal.appendChild(this.search);
-		document.body.appendChild(this.overlay);
-		document.body.appendChild(this.modal);
+		document.body.appendChild( this.node );
+
 		this.resize();
 
 		jQuery( this.search ).typeahead( {
-				hint: true,
-				highlight: true,
-				minLength: 1
-			},
-			{
-				name: 'results',
-				limit: 10,
-				display: 'title',
-				source: new Bloodhound( {
-					local: this.localData,
-					datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
-					queryTokenizer: Bloodhound.tokenizers.whitespace,
-					remote: {
-						url: window.ajaxurl + '?action=jarvis-search&q=%s&nonce=' + this.settings.nonce,
-						wildcard: '%s',
-						transform: (response) => {
-							return response.data.map( (data) => new JarvisSuggestionRemote(data) );
-						}
-					}
-				}),
-				templates: {
-					suggestion: (data) => {
-						return this.templates.suggestion(data);
-					}
-				}
+			hint      : true,
+			highlight : true,
+			minLength : 1,
+			classNames: {
+				cursor    : 'jarvis__cursor',
+				dataset   : 'jarvis__dataset',
+				empty     : 'jarvis__empty',
+				highlight : 'jarvis__highlight',
+				hint      : 'jarvis__hint',
+				input     : 'jarvis__input',
+				menu      : 'jarvis__menu',
+				open      : 'jarvis__open',
+				selectable: 'jarvis__selectable',
+				suggestion: 'jarvis__suggestion',
+				wrapper   : 'jarvis__wrap',
 			}
-		).on('typeahead:selected', (e, item) => {
-			location.href = item.href;
-		}).on('keyup', () => {
+		}, {
+			name: 'results',
+			limit: 10,
+			display: 'title',
+			source: new Bloodhound( {
+				local: this.localData,
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace( 'title' ),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: {
+					url: window.ajaxurl + '?action=jarvis-search&q=%s&nonce=' + this.settings.nonce,
+					wildcard: '%s',
+					transform: ( response ) => {
+						return response.data.map( data => new JarvisSuggestionRemote( data ) );
+					},
+				}
+			} ),
+			templates: {
+				suggestion: ( data ) => this.templates.suggestion( data ),
+			}
+		} ).on( 'typeahead:select', ( e, item ) => {
+			if ( this.ctrlKey ) {
+				window.open( item.href, '_blank' );
+			} else {
+				location.href = item.href;
+			}
+		} ).on( 'keyup', () => {
 			self.term = this.value;
-		}).typeahead('val', this.term).focus();
+		} ).typeahead( 'val', this.term ).focus();
 	}
 
 	close() {
 		this.opened = false;
-		this.overlay.parentNode.removeChild( this.overlay );
-		this.modal.parentNode.removeChild( this.modal );
-		jQuery(this.search).typeahead( 'destroy' );
+		this.node.parentNode.removeChild( this.node );
+		jQuery( this.search ).typeahead( 'destroy' );
 	}
 
 	toggle() {
@@ -200,7 +228,7 @@ class Jarvis {
 
 	resize() {
 		if ( this.opened ) {
-			this.modal.style.marginLeft = Math.ceil(-1 * this.modal.offsetWidth / 2) + 'px';
+			this.modal.style.marginLeft = Math.ceil( -1 * this.modal.offsetWidth / 2 ) + 'px';
 		}
 	}
 };
