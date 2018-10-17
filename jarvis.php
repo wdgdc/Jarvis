@@ -318,7 +318,7 @@ class Jarvis {
 			FROM
 				$wpdb->posts
 			WHERE
-				$wpdb->posts.post_status NOT IN ('revision', 'auto-draft') AND $wpdb->posts.post_type <> 'revision'
+				$wpdb->posts.post_status NOT IN ('revision', 'auto-draft', 'trash')
 			AND
 				$wpdb->posts.post_type IN ($post_types)
 			AND (
