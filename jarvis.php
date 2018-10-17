@@ -192,21 +192,21 @@ class Jarvis {
 	 *
 	 * @access private
 	 */
-	private function search_post_id($id = null) {
-		if (!empty($id)) {
-			$post = get_post($id);
+	private function search_post_id( $id = null ) {
+		if ( ! empty( $id ) ) {
+			$post = get_post( $id );
 
-			if (!empty($post)) {
+			if ( ! empty( $post ) ) {
 
 				$post_result = (object) array(
 					'id'    => $post->ID,
-					'title' => apply_filters('the_title', $post->post_title) . " - (ID $id)",
+					'title' => $post->post_title . " - (ID $id)",
 					'type'  => $post->post_type,
 					'kind'  => $post->post_type,
 					'isId'  => true
 				);
 
-				array_unshift($this->results, $post_result);
+				array_unshift( $this->results, $post_result );
 			}
 		}
 	}
