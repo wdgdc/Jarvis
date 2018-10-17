@@ -61,7 +61,7 @@ class Jarvis {
 		}
 
 		// this code allows us to determine the post type icon for custom post types that have a dashicon specified
-		$post_types = array_filter( get_post_types( [ 'show_ui' => true ], 'objects' ), function( $post_type ) {
+		$post_types = array_filter( get_post_types( [], 'objects' ), function( $post_type ) {
 			return ! empty( $post_type->menu_icon );
 		} );
 
@@ -230,6 +230,15 @@ class Jarvis {
 				$result->att_src = wp_get_attachment_image_src( get_post_thumbnail_id( $result->id, [ 28, 28 ] ) );
 				$result->att_src = $result->att_src[0];
 				break;
+			case 'user':
+				$avatar = get_avatar_data( $result->id, [
+					'size' => [ 28, 28 ],
+				] );
+
+				if ( ! empty( $avatar['found_avatar'] ) ) {
+					$result->att_src = $avatar['url'];
+				}
+				break;
 		}
 
 		return $result;
@@ -301,6 +310,25 @@ class Jarvis {
 				OR
 				$wpdb->posts.post_name LIKE %s
 			)
+		UNION
+			SELECT
+				$wpdb->users.ID as 'id',
+				$wpdb->users.display_name as 'title',
+				'user' as 'type',
+				'user' as 'kind',
+				$wpdb->users.user_email as 'slug',
+				FLOOR( (LENGTH($wpdb->users.ID) - LENGTH(REPLACE(LOWER($wpdb->users.ID), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_id',
+				FLOOR( (LENGTH($wpdb->users.display_name) - LENGTH(REPLACE(LOWER($wpdb->users.display_name), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_title',
+				0 as 'relv_type',
+				FLOOR( (LENGTH($wpdb->users.user_email) / LENGTH(REPLACE(LOWER($wpdb->users.user_email), LOWER(%s), '')) ) ) as 'relv_slug'
+			FROM
+				$wpdb->users
+			WHERE
+				$wpdb->users.display_name LIKE %s
+			OR
+				$wpdb->users.user_email LIKE %s
+			OR
+				$wpdb->users.user_login LIKE %s
 		ORDER BY relv_id, relv_slug, relv_type, relv_title DESC
 		LIMIT 20
 		";
@@ -309,7 +337,9 @@ class Jarvis {
 			$srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry,
 			$srch_escaped_spaces, $srch_escaped_spaces,
 			$srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry,
-			$srch_escaped_spaces, $srch_escaped_spaces
+			$srch_escaped_spaces, $srch_escaped_spaces,
+			$srch_qry, $srch_qry, $srch_qry, $srch_qry, $srch_qry,
+			$srch_escaped_spaces, $srch_escaped_spaces, $srch_escaped_spaces
 		);
 
 		$this->results = $wpdb->get_results( $wpdb->prepare($strQry, $sql_prepared) );
