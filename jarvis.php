@@ -30,20 +30,17 @@ class Jarvis {
 	);
 
 	private function __construct() {
-		global $wp_version;
-
-		$this->options['loadingimg'] = plugins_url($this->options['loadingimg'], __FILE__);
-		$this->options['dashicons'] = ( version_compare($wp_version, '3.8', '>=' ) ) ? true : false;
 		$this->options['nonce'] = wp_create_nonce( 'jarvis-search' );
 
-		add_action('admin_bar_menu', array($this, 'menubar_icon'), 100);
-		add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-		add_action('admin_init', array($this, 'admin_init'));
-		add_action('edit_user_profile', array($this, 'show_user_profile'));
-		add_action('edit_user_profile_update', array($this, 'edit_user_profile_update'));
-		add_action('personal_options_update', array($this, 'edit_user_profile_update'));
-		add_action('show_user_profile', array($this, 'show_user_profile'));
-		add_action('wp_ajax_jarvis-search', array($this, 'get_search_results'), 1);
+
+		add_action( 'admin_bar_menu', [ $this, 'menubar_icon' ] , 100 );
+		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
+		add_action( 'admin_init', [ $this, 'admin_init' ] );
+		add_action( 'edit_user_profile', [ $this, 'show_user_profile' ] );
+		add_action( 'edit_user_profile_update', [ $this, 'edit_user_profile_update' ] );
+		add_action( 'personal_options_update', [ $this, 'edit_user_profile_update' ] );
+		add_action( 'show_user_profile', [ $this, 'show_user_profile' ] );
+		add_action( 'wp_ajax_jarvis-search', [ $this, 'get_search_results' ] , 1 );
 	}
 
 	/**
@@ -255,7 +252,7 @@ class Jarvis {
 		global $wpdb;
 
 		// Don't break the json if debug is off
-		if (!defined('WP_DEBUG') || !WP_DEBUG) {
+		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 			error_reporting(0);
 		}
 
@@ -263,12 +260,12 @@ class Jarvis {
 			wp_send_json_error( 'invalid nonce' );
 		}
 
-		$_REQUEST['q'] = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
+		$_REQUEST['q'] = isset( $_REQUEST['q'] ) ? $_REQUEST['q'] : '';
 
-		$srch_qry = $wpdb->esc_like($_REQUEST['q']);
-		$srch_escaped_spaces = '%'.str_replace(' ', '%', $srch_qry).'%';
+		$srch_qry = $wpdb->esc_like( $_REQUEST['q'] );
+		$srch_escaped_spaces = '%' . str_replace( ' ', '%', $srch_qry ) . '%';
 
-		$post_types = "'".implode("','", array_values(get_post_types(array('show_ui' => true))))."'";
+		$post_types = "'" . implode( "','", array_values( get_post_types( array( 'show_ui' => true ) ) ) ) . "'";
 
 		$strQry = "SELECT
 				$wpdb->terms.term_id as 'id',
@@ -342,12 +339,12 @@ class Jarvis {
 			$srch_escaped_spaces, $srch_escaped_spaces, $srch_escaped_spaces
 		);
 
-		$this->results = $wpdb->get_results( $wpdb->prepare($strQry, $sql_prepared) );
+		$this->results = $wpdb->get_results( $wpdb->prepare( $strQry, $sql_prepared ) );
 
-		$this->search_post_id($_REQUEST['q']);
-		$this->results = array_map(array($this, 'normalize'), $this->results);
+		$this->search_post_id( $_REQUEST['q'] );
+		$this->results = array_map( array( $this, 'normalize' ), $this->results );
 
-		wp_send_json_success($this->results);
+		wp_send_json_success( $this->results );
 	}
 }
 
