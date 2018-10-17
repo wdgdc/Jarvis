@@ -22,16 +22,22 @@ class Jarvis {
 		return self::$_instance;
 	}
 
+	private $themes = [
+		'light' => 'Light',
+		'dark'  => 'Dark'
+	];
+
 	private $options = array(
-		'hotkey' => '/',
+		'hotkey'  => '/',
 		'keyCode' => 191,
-		'loadingimg' => 'img/wpspin.gif',
-		'dashicons' => false
+		'theme'   => 'light',
 	);
 
 	private function __construct() {
 		$this->options['nonce'] = wp_create_nonce( 'jarvis-search' );
 
+		$theme = get_user_meta( get_current_user_id(), 'jarvis_theme', true );
+		$this->options['theme'] = ( ! empty( $theme ) && in_array( $theme, array_keys( $this->themes ), true ) ) ? $theme : array_keys( $this->themes )[0];
 
 		add_action( 'admin_bar_menu', [ $this, 'menubar_icon' ] , 100 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
@@ -88,6 +94,18 @@ class Jarvis {
 					<input type="hidden" id="jarvis_keycode" name="jarvis_keycode" value="<?php echo $this->options['keyCode']; ?>">
 				</td>
 			</tr>
+			<tr>
+				<th><label for="jarvis-theme">Theme</label></th>
+				<td>
+					<p>
+						<select name="jarvis_theme" class="regular-text">
+							<?php foreach( $this->themes as $theme => $label ) : ?>
+							<option value="<?php echo esc_attr( $theme ); ?>"<?php if ( $theme === $this->options['theme'] ) echo ' selected'; ?>><?php echo esc_html( $label ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</p>
+				</td>
+			</tr>
 		</table>
 
 		<script>
@@ -130,8 +148,9 @@ class Jarvis {
 	 */
 	public function edit_user_profile_update( $user_id ) {
 		if ( current_user_can( 'edit_user', $user_id ) ) {
-			update_user_meta( $user_id, 'jarvis_hotkey', $_POST['jarvis_hotkey'] );
-			update_user_meta( $user_id, 'jarvis_keycode', $_POST['jarvis_keycode'] );
+			update_user_meta( $user_id, 'jarvis_hotkey', sanitize_text_field( $_POST['jarvis_hotkey'] ) );
+			update_user_meta( $user_id, 'jarvis_keycode', sanitize_text_field( $_POST['jarvis_keycode'] ) );
+			update_user_meta( $user_id, 'jarvis_theme', sanitize_text_field( $_POST['jarvis_theme'] ) );
 		}
 	}
 
