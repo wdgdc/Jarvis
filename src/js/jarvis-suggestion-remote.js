@@ -8,10 +8,13 @@ class JarvisSuggestionRemote extends JarvisSuggestionBase {
 			}
 		}
 
-		console.log(this);
+		this.source = 'remote';
 
-		// let iconType = ( this.type && this.icons[ this.type ] ) ? this.icons[ this.type ] : 'post';
-		// this.icon.type = this.icons[ iconType ].type;
-		// this.icon.icon = this.icons[ iconType ].icon;
+		if ( typeof this.att_src === 'string' && this.att_src.length > 0 ) {
+			this.icon.type = 'image';
+			this.icon.style = `background-image: url(${this.att_src})`;
+		} else {
+			this.setIcon( this.type );
+		}
 	}
 }

@@ -17,44 +17,9 @@ class Jarvis {
 		}, options );
 
 		// merge the default dashicons that you can't scape from the admin menu for remote data
-		this.settings.icons = jQuery.extend( {
-			attachment: {
-				type: 'dashicon',
-				icon: 'dashicons-admin-media',
-			},
-			category: {
-				type: 'dashicon',
-				icon: 'dashicons-category',
-			},
-			nav_menu: {
-				type: 'dashicon',
-				icon: 'dashicons-admin-appearance',
-			},
-			nav_menu_item: {
-				type: 'dashicon',
-				icon: 'dashicons-admin-appearance',
-			},
-			page: {
-				type: 'dashicon',
-				icon: 'dashicons-admin-page',
-			},
-			post: {
-				type: 'dashicon',
-				icon: 'dashicons-admin-post',
-			},
-			post_tag: {
-				type: 'dashicon',
-				icon: 'dashicons-tag',
-			},
-			post_format: {
-				type: 'dashicon',
-				icon: 'dashicons-format-standard',
-			},
-			term: {
-				type: 'dashicon',
-				icon: 'dashicons-category',
-			},
-		}, this.settings.icons );
+		if ( this.settings.icons && jarvisIcons ) {
+			jarvisIcons = jQuery.extend( jarvisIcons, this.settings.icons );
+		}
 
 		// make sure our keycode is an int
 		this.settings.keyCode = parseInt( this.settings.keyCode, 10 );
@@ -88,14 +53,14 @@ class Jarvis {
 
 		// underscore template for suggestion
 		this.templates = {
-			suggestion: _.template(`
-				<span class="<%= prefix %> <%= kind %>">
-					<a href="<%= href %>">
-						<span class="<% print( icon.classes.join(' ') ) %>" style='<%= icon.style %>' title="<%= prefix %>"></span>
-						<span class="jarvis-title" title="<%- title %>"><%- title %></span>
+			suggestion: _.template( `
+				<span class="<%= kind %>">
+					<a href="<%= href %>" data-source="<%= source %>" data-type="<%= type %>">
+						<span class="<% print( icon.classes.join( ' ' ) ) %>" style='<%= icon.style %>' title="<%= prefix %>"></span>
+						<span class="jarvis__title" title="<%- title %>"><%- title %></span>
 					</a>
 				</span>
-			`)
+			` )
 		};
 
 		// function for determining if the quick key should fire

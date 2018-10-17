@@ -159,15 +159,13 @@ class Jarvis {
 	 * @action admin_footer
 	 */
 	public function menubar_icon($admin_bar) {
-		$className = ($this->options['dashicons'] === true) ? 'dashicon' : 'image';
-
 		$admin_bar->add_menu(array(
 			'id' => 'jarvis_menubar_icon',
 			'title' => '<span>Jarvis Search</span>',
 			'href' => '#jarvis',
 			'meta' => array(
 				'title' => 'Invoke Jarvis',
-				'class' => $className
+				'class' => 'dashicon'
 			),
 			'parent' => 'top-secondary'
 		));
@@ -203,22 +201,33 @@ class Jarvis {
 	 * @access private
 	 */
 	private function normalize($result) {
-		$typeEditPaths = array(
-			'_default_' => 'post.php?post=%s&action=edit',
-			'term'      => 'edit-tags.php?action=edit&tag_ID=%s&taxonomy=%s',
-			'post'      => 'post.php?post=%s&action=edit'
+		$edit_paths = array(
+			'_default_'  => 'post.php?post=%d&action=edit',
+			'term'       => 'edit-tags.php?action=edit&tag_ID=%d&taxonomy=%s',
+			'post'       => 'post.php?post=%d&action=edit',
+			'user'       => 'user-edit.php?user_id=%d',
+			'attachment' => 'upload.php?item=%d',
 		);
-		$editUrl = (isset($typeEditPaths[$result->kind])) ? $typeEditPaths[$result->kind] : $typeEditPaths['_default_'];
 
-		$result->href = admin_url(sprintf($editUrl, $result->id, $result->type));
+		if ( isset( $edit_paths[ $result->kind ] ) ) {
+			if ( isset( $edit_paths[ $result->type ] ) ) {
+				$edit_url = $edit_paths[ $result->type ];
+			} else {
+				$edit_url = $edit_paths[ $result->kind ];
+			}
+		} else {
+			$edit_url = $edit_paths['_default_'];
+		}
 
-		switch($result->type) {
+		$result->href = admin_url( sprintf( $edit_url, $result->id, $result->type ) );
+
+		switch( $result->type ) {
 			case 'attachment':
-				$result->att_src = wp_get_attachment_image_src($result->id, array(28,28));
+				$result->att_src = wp_get_attachment_image_src( $result->id, [ 28, 28 ] );
 				$result->att_src = $result->att_src[0];
 				break;
 			case 'post':
-				$result->att_src = wp_get_attachment_image_src(get_post_thumbnail_id($result->id, array(28,28)));
+				$result->att_src = wp_get_attachment_image_src( get_post_thumbnail_id( $result->id, [ 28, 28 ] ) );
 				$result->att_src = $result->att_src[0];
 				break;
 		}
