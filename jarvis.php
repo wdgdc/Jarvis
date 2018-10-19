@@ -217,7 +217,7 @@ class Jarvis {
 	 * @action admin_footer
 	 */
 	public function menubar_icon($admin_bar) {
-		$admin_bar->add_menu(array(
+		$admin_bar->add_menu( [
 			'id' => 'jarvis_menubar_icon',
 			'title' => '<span>Jarvis Search</span>',
 			'href' => '#jarvis',
@@ -226,31 +226,7 @@ class Jarvis {
 				'class' => 'dashicon'
 			),
 			'parent' => 'top-secondary'
-		));
-	}
-
-	/**
-	 * Prepend post_id search to main search query
-	 *
-	 * @access private
-	 */
-	private function search_post_id( $id = null ) {
-		if ( ! empty( $id ) ) {
-			$post = get_post( $id );
-
-			if ( ! empty( $post ) ) {
-
-				$post_result = (object) array(
-					'id'    => $post->ID,
-					'title' => $post->post_title . " - (ID $id)",
-					'type'  => $post->post_type,
-					'kind'  => $post->post_type,
-					'isId'  => true
-				);
-
-				array_unshift( $this->results, $post_result );
-			}
-		}
+		] );
 	}
 
 	/**
@@ -258,14 +234,14 @@ class Jarvis {
 	 *
 	 * @access private
 	 */
-	private function normalize($result) {
-		$edit_paths = array(
+	private function normalize( $result ) {
+		$edit_paths = [
 			'_default_'  => 'post.php?post=%d&action=edit',
 			'term'       => 'edit-tags.php?action=edit&tag_ID=%d&taxonomy=%s',
 			'post'       => 'post.php?post=%d&action=edit',
 			'user'       => 'user-edit.php?user_id=%d',
 			'attachment' => 'upload.php?item=%d',
-		);
+		];
 
 		if ( isset( $edit_paths[ $result->kind ] ) ) {
 			if ( isset( $edit_paths[ $result->type ] ) ) {
@@ -301,7 +277,7 @@ class Jarvis {
 
 		$result->title = apply_filters( 'the_title', $result->title, $result->id );
 
-		return apply_filters( 'jarvis_normalize', $result );
+		return apply_filters( 'jarvis/normalize', $result );
 	}
 
 	/**
@@ -314,31 +290,28 @@ class Jarvis {
 	public function get_search_results() {
 		global $wpdb;
 
-		// Don't break the json if debug is off
-		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
-			error_reporting(0);
-		}
-
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'jarvis-search' ) ) {
 			wp_send_json_error( 'invalid nonce' );
 		}
 
 		$query = ( isset( $_REQUEST['q'] ) ) ? wp_unslash( $_REQUEST['q'] ) : '';
+
 		$query_esc_like = $wpdb->esc_like( $_REQUEST['q'] );
 		$query_esc_like_spaces = '%' . str_replace( ' ', '%', $query_esc_like ) . '%';
 
-		$post_types = apply_filters( 'jarvis_include_post_types', array_values( get_post_types( [ 'show_ui' => true ] ) ) );
+		$post_types = apply_filters( 'jarvis/include_post_types', array_values( get_post_types( [ 'show_ui' => true ] ) ) );
 		$post_types_sql = "'" . implode( "','", $post_types ) . "'";
 
-		$post_stati_exclude = apply_filters( 'jarvis_exclude_post_statuses', [ 'revision', 'auto-draft', 'trash' ] );
+		$post_stati_exclude = apply_filters( 'jarvis/exclude_post_statuses', [ 'revision', 'auto-draft', 'trash' ] );
 		$post_stati_exclude_sql = "'" . implode( "','", $post_stati_exclude ) . "'";
 
-		$strQry = "SELECT
+		$sql_query = "SELECT
 				$wpdb->terms.term_id as 'id',
 				$wpdb->terms.`name` as 'title',
 				$wpdb->term_taxonomy.taxonomy as 'type',
 				'term' as 'kind',
 				$wpdb->terms.slug as 'slug',
+				$wpdb->terms.term_id = %s as 'exact_id',
 				FLOOR( (LENGTH($wpdb->terms.term_id) - LENGTH(REPLACE(LOWER($wpdb->terms.term_id), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_id',
 				FLOOR( (LENGTH($wpdb->term_taxonomy.taxonomy) - LENGTH(REPLACE(LOWER($wpdb->term_taxonomy.taxonomy), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_title',
 				FLOOR( (LENGTH($wpdb->terms.`name`) - LENGTH(REPLACE(LOWER($wpdb->terms.`name`), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_type',
@@ -347,10 +320,13 @@ class Jarvis {
 				$wpdb->terms
 			INNER JOIN
 				$wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
-			WHERE
+			WHERE (
 				$wpdb->terms.`name` LIKE %s
-			OR
+				OR
 				$wpdb->terms.slug LIKE %s
+			)
+			OR
+				$wpdb->terms.term_id = %s
 		UNION
 			SELECT
 				$wpdb->posts.ID as 'id',
@@ -358,6 +334,7 @@ class Jarvis {
 				$wpdb->posts.post_type as 'type',
 				'post' as 'kind',
 				$wpdb->posts.post_name as 'slug',
+				$wpdb->posts.ID = %s as 'exact_id',
 				FLOOR( (LENGTH($wpdb->posts.ID) - LENGTH(REPLACE(LOWER($wpdb->posts.ID), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_id',
 				FLOOR( (LENGTH($wpdb->posts.post_title) - LENGTH(REPLACE(LOWER($wpdb->posts.post_title), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_title',
 				FLOOR( (LENGTH($wpdb->posts.post_type) - LENGTH(REPLACE(LOWER($wpdb->posts.post_type), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_type',
@@ -369,9 +346,13 @@ class Jarvis {
 			AND
 				$wpdb->posts.post_type IN ($post_types_sql)
 			AND (
-				$wpdb->posts.post_title LIKE %s
+				(
+					$wpdb->posts.post_title LIKE %s
+					OR
+					$wpdb->posts.post_name LIKE %s
+				)
 				OR
-				$wpdb->posts.post_name LIKE %s
+				$wpdb->posts.ID = %s
 			)
 		UNION
 			SELECT
@@ -380,37 +361,57 @@ class Jarvis {
 				'user' as 'type',
 				'user' as 'kind',
 				$wpdb->users.user_email as 'slug',
+				$wpdb->users.ID = %s as 'exact_id',
 				FLOOR( (LENGTH($wpdb->users.ID) - LENGTH(REPLACE(LOWER($wpdb->users.ID), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_id',
 				FLOOR( (LENGTH($wpdb->users.display_name) - LENGTH(REPLACE(LOWER($wpdb->users.display_name), LOWER(%s), '')) / LENGTH(%s)) ) as 'relv_title',
 				0 as 'relv_type',
 				FLOOR( (LENGTH($wpdb->users.user_email) / LENGTH(REPLACE(LOWER($wpdb->users.user_email), LOWER(%s), '')) ) ) as 'relv_slug'
 			FROM
 				$wpdb->users
-			WHERE
+			WHERE (
 				$wpdb->users.display_name LIKE %s
-			OR
+				OR
 				$wpdb->users.user_email LIKE %s
-			OR
+				OR
 				$wpdb->users.user_login LIKE %s
-		ORDER BY relv_id, relv_slug, relv_type, relv_title DESC
+			)
+			OR
+			$wpdb->users.ID = %s
+		ORDER BY
+			exact_id DESC,
+			relv_id DESC,
+			relv_slug DESC,
+			relv_type DESC,
+			relv_title DESC,
+			kind ASC
 		LIMIT 20
 		";
 
 		$sql_prepared = array(
+			// terms
+			$query,
 			$query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like,
 			$query_esc_like_spaces, $query_esc_like_spaces,
+			$query,
+
+			// posts
+			$query,
 			$query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like,
 			$query_esc_like_spaces, $query_esc_like_spaces,
+			$query,
+
+			// users
+			$query,
 			$query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like, $query_esc_like,
-			$query_esc_like_spaces, $query_esc_like_spaces, $query_esc_like_spaces
+			$query_esc_like_spaces, $query_esc_like_spaces, $query_esc_like_spaces,
+			$query
 		);
 
-		$this->results = $wpdb->get_results( $wpdb->prepare( $strQry, $sql_prepared ) );
+		$this->results = $wpdb->get_results( $wpdb->prepare( $sql_query, $sql_prepared ) );
 
-		$this->search_post_id( $_REQUEST['q'] );
 		$this->results = array_map( array( $this, 'normalize' ), $this->results );
 
-		$this->results = apply_filters( 'jarvis_results', $this->results, $query );;
+		$this->results = apply_filters( 'jarvis/results', $this->results, $query );;
 
 		wp_send_json_success( $this->results );
 	}
