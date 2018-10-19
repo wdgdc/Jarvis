@@ -9,10 +9,12 @@ class JarvisSuggestionMenu extends JarvisSuggestionBase {
 		this.kind    = 'menu';
 		this.type    = this.kind;
 		this.href    = link.href;
-		this.title   = jQuery( this.link ).text();
+		this.pills.push( this.type );
 
 		if ( jQuery( this.link ).is( '.wp-submenu a' ) ) {
-			this.title = `${this.prefix} » ${this.title}`;
+			this.title = `${this.prefix} » ${jQuery( this.link ).clone().children().remove().end().text()}`;
+		} else {
+			this.title = this.prefix;
 		}
 
 		this.scrapeIcon();
@@ -50,8 +52,11 @@ class JarvisSuggestionMenu extends JarvisSuggestionBase {
 						break;
 					case $wpMenuIcon.hasClass( 'svg' ):
 						computedStyle = window.getComputedStyle( $wpMenuIcon.get( 0 ) );
-						this.icon.type  = 'svg';
-						this.icon.style = `background-position: left center; background-repeat: no-repeat; background-image: ${computedStyle.backgroundImage}; background-size: ${computedStyle.backgroundSize}`;
+						if ( /^url\("data:image\/svg\+xml\;base64,/.test( computedStyle.backgroundImage ) ) {
+							this.icon.type = 'svg';
+							this.icon.img  = atob( computedStyle.backgroundImage.replace( /^url\("data:image\/svg\+xml\;base64,/, '' ).replace( /\"\)$/, '' ) );
+							this.icon.img  = this.icon.img.replace( /<\?xml [^>]+\?>/g, '' ).replace( /\sid="[^\"]+"/g, '' ).replace( /<!--[\s\S]*?-->/g, '' ).replace( /<(title|desc|defs)>[^<]+?<\/(title|desc|defs)>/g, '' );
+						}
 						break;
 					case this.section.find('.wp-menu-image img').length > 0:
 						computedStyle = window.getComputedStyle( $wpMenuIcon.get( 0 ) );

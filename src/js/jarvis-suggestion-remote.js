@@ -10,9 +10,15 @@ class JarvisSuggestionRemote extends JarvisSuggestionBase {
 
 		this.source = 'remote';
 
+		if ( parseInt( this.exact_id, 10 ) > 0 ) {
+			this.pills.push( `ID ${this.id}` );
+		}
+
+		this.pills.push( this.type );
+
 		if ( typeof this.att_src === 'string' && this.att_src.length > 0 ) {
 			this.icon.type = 'image';
-			this.icon.style = `background-image: url(${this.att_src})`;
+			this.icon.img = `<img src="${this.att_src}" alt="">`;
 		} else {
 			this.setIcon( this.type );
 		}

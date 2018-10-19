@@ -63,8 +63,15 @@ class Jarvis {
 			suggestion: _.template( `
 				<span class="<%= kind %>">
 					<a href="<%= href %>" data-source="<%= source %>" data-type="<%= type %>">
-						<span class="<% print( icon.classes.join( ' ' ) ) %>" style='<%= icon.style %>' title="<%= prefix %>"></span>
+						<span class="<% print( icon.classes.join( ' ' ) ) %>" style='<%= icon.style %>' title="<%= prefix %>"><%= icon.img %></span>
 						<span class="jarvis__title" title="<%- title %>"><%- title %></span>
+						<% if ( pills ) { %>
+							<span class="jarvis__pills">
+								<% _.each( pills, function(pill) { %>
+									<span class="jarvis__pill"><%= pill %></span>
+								<% } ); %>
+							</span>
+						<% } %>
 					</a>
 				</span>
 			` )

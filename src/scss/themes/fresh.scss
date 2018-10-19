@@ -1,0 +1,17 @@
+@import 'jarvis-theme';
+
+@include jarvis-theme( (
+	hint-text: #969696,
+	input-text: inherit,
+	input-background: #ebebeb,
+	loading-dot: #ffffff,
+	loading: #808080,
+	menu-background: #ffffff,
+	modal-background: #ffffff,
+	overlay-background: rgba( 0, 0, 0, .7 ),
+	suggestion-focus-background: #eff8ff,
+	suggestion-focus-text: #d54e21,
+	suggestion-hover-background: #eff8ff,
+	suggestion-hover-text: #d54e21,
+	suggestion-text: #0073aa,
+) );

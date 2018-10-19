@@ -50,12 +50,14 @@ class JarvisSuggestionBase {
 		this.source  = '';
 		this.title   = '';
 		this.type    = '';
+		this.pills   = [];
 
 		this.iconKey = '';
 		this.icon    = {
 			type: 'dashicon',
 			icon: '',
 			style: '',
+			img: '',
 			classes: [
 				'jarvis__icon',
 			],

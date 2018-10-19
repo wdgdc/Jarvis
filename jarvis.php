@@ -15,29 +15,47 @@ class Jarvis {
 	const VERSION = '0.51.0';
 
 	private static $_instance;
+
 	public static function get_instance() {
-		if (empty(self::$_instance)) {
+		if ( empty( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
+
 		return self::$_instance;
 	}
 
 	private $themes = [
-		'light' => 'Light',
-		'dark'  => 'Dark'
+		''                => 'Match WordPress Theme',
+		'fresh'           => 'Fresh',
+		'light'           => 'Light',
+		'blue'            => 'Blue',
+		'coffee'          => 'Coffee',
+		'ectoplasm'       => 'Ectoplasm',
+		'midnight'        => 'Midnight',
+		'ocean'           => 'Ocean',
+		'sunrise'         => 'Sunrise',
+		'one-dark'        => 'One Dark',
+		'solarized-dark'  => 'Solarized Dark',
+		'solarized-light' => 'Solarized Light',
 	];
 
 	private $options = array(
 		'hotkey'  => '/',
 		'keyCode' => 191,
-		'theme'   => 'light',
+		'theme'   => '',
 	);
 
 	private function __construct() {
 		$this->options['nonce'] = wp_create_nonce( 'jarvis-search' );
 
+		$this->themes = apply_filters( 'jarvis/themes', $this->themes );
+
 		$theme = get_user_meta( get_current_user_id(), 'jarvis_theme', true );
-		$this->options['theme'] = ( ! empty( $theme ) && in_array( $theme, array_keys( $this->themes ), true ) ) ? $theme : array_keys( $this->themes )[0];
+		if ( empty( $theme ) ) {
+			$theme = get_user_option( 'admin_color' );
+		}
+
+		$this->options['theme'] = ( ! empty( $theme ) && in_array( $theme, array_keys( $this->themes ), true ) ) ? $theme : 'fresh';
 
 		add_action( 'admin_bar_menu', [ $this, 'menubar_icon' ] , 100 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
@@ -82,7 +100,9 @@ class Jarvis {
 	 * @access public
 	 * @action show_user_profile, edit_user_profile
 	 */
-	public function show_user_profile( $user ) { ?>
+	public function show_user_profile( $user ) {
+		$user_theme = get_user_meta( get_current_user_id(), 'jarvis_theme', true );
+		?>
 		<h3>Jarvis</h3>
 
 		<table class="form-table">
@@ -100,7 +120,7 @@ class Jarvis {
 					<p>
 						<select name="jarvis_theme" class="regular-text">
 							<?php foreach( $this->themes as $theme => $label ) : ?>
-							<option value="<?php echo esc_attr( $theme ); ?>"<?php if ( $theme === $this->options['theme'] ) echo ' selected'; ?>><?php echo esc_html( $label ); ?></option>
+							<option value="<?php echo esc_attr( $theme ); ?>"<?php if ( $theme === $user_theme ) echo ' selected'; ?>><?php echo esc_html( $label ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</p>
@@ -109,7 +129,7 @@ class Jarvis {
 		</table>
 
 		<script>
-			(function() {
+			(function($) {
 				var hotKey  = document.getElementById('jarvis_hotkey');
 				var keyCode = document.getElementById('jarvis_keycode');
 				var keys = {
@@ -135,8 +155,28 @@ class Jarvis {
 						keyCode.value = '';
 					}
 				}
-				jQuery(hotKey).on('keyup', keyUp);
-			})();
+				$(hotKey).on('keyup', keyUp);
+
+				var jarvisThemeCss = document.getElementById('wp-jarvis-theme-css');
+				jarvisThemeCss.setAttribute('data-href', jarvisThemeCss.href);
+
+				var jarvisTheme = document.querySelector('select[name="jarvis_theme"]');
+
+				var changeScheme = function( scheme ) {
+					jarvisThemeCss.setAttribute( 'href', '<?php echo plugins_url( 'dist/themes/', __FILE__ ); ?>' + scheme + '.css?ver=<?php echo self::VERSION; ?>' );
+				}
+
+				jarvisTheme.addEventListener( 'change', function() {
+					changeScheme( this.value );
+				});
+
+				$('#color-picker').on( 'click.colorpicker', '.color-option', function() {
+					if ( jarvisTheme.value === '' ) {
+						changeScheme( $(this).find( 'input[type="radio"]' ).val() );
+					}
+				} );
+
+			})(jQuery);
 		</script>
 	<?php }
 
@@ -162,6 +202,8 @@ class Jarvis {
 	 */
 	public function admin_enqueue_scripts() {
 		wp_enqueue_style( 'wp-jarvis', plugins_url( 'dist/jarvis.css', __FILE__ ), [], self::VERSION, 'screen' );
+		wp_enqueue_style( 'wp-jarvis-theme', plugins_url( 'dist/themes/'. $this->options['theme'] .'.css', __FILE__ ), [], self::VERSION, 'screen' );
+
 		wp_register_script( 'typeahead', plugins_url( 'dist/vendor/typeahead.js/dist/typeahead.bundle.min.js', __FILE__ ), array( 'jquery' ), self::VERSION );
 		wp_enqueue_script( 'wp-jarvis', plugins_url( 'dist/jarvis.js', __FILE__), array( 'jquery', 'underscore', 'typeahead' ), self::VERSION );
 

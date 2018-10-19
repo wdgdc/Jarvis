@@ -1,0 +1,22 @@
+@import 'jarvis-theme';
+
+$dark: #26292c;
+$red: #e14d43;
+$white: #ffffff;
+
+@include jarvis-theme( (
+	hint-text: rgba( $white, .4 ),
+	input-text: rgb( 200, 200, 200 ),
+	input-background: darken( $dark, 10% ),
+	loading-dot: $white,
+	loading: $red,
+	menu-background: $dark,
+	modal-background: $dark,
+	overlay-background: rgba( $dark, .85 ),
+	suggestion-focus-background: $red,
+	suggestion-focus-text: $white,
+	suggestion-hover-background: lighten( $red, 10% ),
+	suggestion-hover-text: $white,
+	suggestion-text: rgb( 200, 200, 200 ),
+) );
+
