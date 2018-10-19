@@ -15,22 +15,10 @@ $gray: #999999;
 	loading: $orange,
 	menu-background: $white,
 	modal-background: $white,
-	overlay-background: rgba( $white, .8 ),
+	overlay-background: rgba( $gray, .8 ),
 	suggestion-text: $blue,
 	suggestion-hover-background: rgba( $blue, .15 ),
 	suggestion-hover-text: $orange,
-	suggestion-focus-background: rgba( $blue, .3 ),
-	suggestion-focus-text: $orange,
+	suggestion-focus-background: $blue,
+	suggestion-focus-text: $white,
 ) );
-
-.jarvis {
-	&__modal {
-		border: 4px solid $gray;
-	}
-	&__menu {
-		border: solid $gray;
-		border-width: 0 4px 4px 4px;
-		transform: translateX(-4px);
-		border-radius: 0 0 .5em .5em;
-	}
-}

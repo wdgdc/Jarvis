@@ -10,9 +10,11 @@ $orange: #d46f15;
 	loading: $orange,
 	menu-background: $purple,
 	modal-background: $purple,
-	overlay-background: rgba( $purple, .7 ),
+	overlay-background: rgba( $green, .7 ),
 	suggestion-focus-background: $green,
-	suggestion-hover-background: lighten( $green, 5% ),
+	suggestion-focus-text: $white,
+	suggestion-hover-background: $purple,
+	suggestion-hover-text: $orange,
 	suggestion-text: $white,
 ) );
 

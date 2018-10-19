@@ -12,11 +12,11 @@ $white: #ffffff;
 	input-background: darken( $white, 10% ),
 	loading-dot: $white,
 	loading: $tan,
-	menu-background: $green,
-	modal-background: $green,
-	overlay-background: rgba( $dark-teal, .85 ),
-	suggestion-focus-background: $dark-teal,
-	suggestion-hover-background: lighten( $dark-teal, 10% ),
+	menu-background: $dark-teal,
+	modal-background: $dark-teal,
+	overlay-background: rgba( $green, .85 ),
+	suggestion-focus-background: $green,
+	suggestion-hover-background: lighten( $green, 10% ),
 	suggestion-text: $white,
 ) );
 

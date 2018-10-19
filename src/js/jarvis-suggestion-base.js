@@ -41,6 +41,8 @@ let jarvisIcons = {
 		icon: 'dashicons-admin-users',
 	},
 };
+
+let suggestionCounter = 0;
 class JarvisSuggestionBase {
 	constructor() {
 		this.href    = '';
@@ -51,6 +53,7 @@ class JarvisSuggestionBase {
 		this.title   = '';
 		this.type    = '';
 		this.pills   = [];
+		this.classes = [];
 
 		this.iconKey = '';
 		this.icon    = {

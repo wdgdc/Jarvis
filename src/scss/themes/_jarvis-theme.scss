@@ -58,6 +58,10 @@
 			a {
 				@if map-get( $colors, suggestion-focus-background ) {
 					background-color: map-get( $colors, suggestion-focus-background );
+
+					&:hover {
+						background-color: map-get( $colors, suggestion-focus-background );
+					}
 				}
 				@if map-get( $colors, suggestion-focus-text ) {
 					color: map-get( $colors, suggestion-focus-text );

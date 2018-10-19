@@ -50,9 +50,9 @@ class Jarvis {
 		this.search = document.createElement( 'input' );
 		this.search.type = 'text';
 
-		this.modal.appendChild( this.search );
-		this.node.appendChild( this.modal );
 		this.node.appendChild( this.overlay );
+		this.node.appendChild( this.modal );
+		this.modal.appendChild( this.search );
 
 		// loading icon node
 		this.loading    = document.createElement( 'span' );
@@ -61,7 +61,7 @@ class Jarvis {
 		// underscore template for suggestion
 		this.templates = {
 			suggestion: _.template( `
-				<span class="<%= kind %>">
+				<span class="<% print( classes.join( ' ' ) ) %>">
 					<a href="<%= href %>" data-source="<%= source %>" data-type="<%= type %>">
 						<span class="<% print( icon.classes.join( ' ' ) ) %>" style='<%= icon.style %>' title="<%= prefix %>"><%= icon.img %></span>
 						<span class="jarvis__title" title="<%- title %>"><%- title %></span>
