@@ -1,3 +1,14 @@
- node_modules/
-.DS_Store
+#subversion dirs
+tags
+trunk
+branches
+.svn
+
+#develop paths
+node_modules/
 dist/*
+
+# common files
+Thumbs.db
+.DS_Store
+*.log
