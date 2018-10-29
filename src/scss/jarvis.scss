@@ -9,22 +9,24 @@
 
 .jarvis {
 	&__overlay {
-		position:fixed;
-		top:0;
-		right:0;
 		bottom:0;
 		left:0;
+		position:fixed;
+		right:0;
+		top:0;
 		z-index:100000;
 	}
 
 	&__modal {
 		border-radius: .5em;
-		max-width: 75%;
-		min-width: 50%;
+		box-sizing: border-box;
+		left: 50%;
+		max-width: 750px;
 		padding: 1em;
 		position: fixed;
-		left: 50%;
 		top: 32px;
+		transform: translateX(-50%);
+		width: 96%;
 		z-index: 100001;
 	}
 
@@ -103,13 +105,14 @@
 	}
 
 	&__icon {
-		line-height: 28px;
-		width: 28px;
-		height: 28px;
 		background-size: 28px 28px;
+		box-sizing: border-box;
+		flex: none;
+		height: 28px;
+		line-height: 28px;
 		margin-right: 8px;
 		text-align: left;
-		flex: none;
+		width: 28px;
 
 		svg,
 		img {
@@ -126,12 +129,14 @@
 
 		&.dashicons-before {
 			background: none;
+			padding-top: 2px;
+			padding-bottom: 2px;
 
 			&:before {
 				height: 24px;
 				width: 24px;
 				font-size: 24px;
-				line-height: 24px;;
+				line-height: 24px;
 			}
 		}
 	}
@@ -163,11 +168,30 @@
 	}
 }
 
+input[name="jarvis_hotkey"] {
+	text-align: center;
+	max-width: 30px;
+
+	&:focus {
+		background-color: gray;
+		color: white;
+	}
+
+	&::selection {
+		background-color: transparent;
+	}
+
+	@media screen and ( max-width: 782px ) {
+		width: auto;
+	}
+}
+
 #wpadminbar {
 	#wp-admin-bar-jarvis_menubar_icon {
+		display: block;
+
 		.ab-item {
-			display:inline-block;
-			overflow:hidden;
+			text-align: center;
 
 			span {
 				position:absolute;
@@ -191,6 +215,19 @@
 				text-decoration: inherit;
 				vertical-align: -5px;
 				width: 20px;
+			}
+		}
+
+		@media screen and ( max-width: 782px ) {
+			.ab-item {
+				width: 46px;
+
+				&::before {
+					font-size: 32px;
+					height: 20px;
+					vertical-align: -10px;
+					width: 28px;
+				}
 			}
 		}
 	}
