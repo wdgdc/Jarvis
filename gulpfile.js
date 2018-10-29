@@ -6,7 +6,6 @@ const babel        = require('gulp-babel');
 const concat       = require('gulp-concat');
 const gulp         = require('gulp');
 const header       = require('gulp-header');
-const insert       = require('gulp-insert');
 const sass         = require('gulp-sass');
 const sassGlob     = require('gulp-sass-glob');
 const sourcemaps   = require('gulp-sourcemaps');
@@ -35,7 +34,6 @@ const banner = `/**
 const js = () => {
 	return gulp.src( `${project.js}` + '/**/*.js' )
 		.pipe( sourcemaps.init() )
-		.pipe( concat( 'jarvis.js' ) )
 		.pipe( babel( {
 			presets: [
 				[
@@ -46,7 +44,6 @@ const js = () => {
 				]
 			]
 		} ) )
-		.pipe( insert.wrap( '(function() {\n\n', '\n\n})();' ) )
 		.pipe( uglify() )
 		.pipe( header( banner, { package: package } ) )
 		.pipe( sourcemaps.write('.') )
@@ -81,5 +78,6 @@ const watch = () => {
 const build = gulp.parallel( vendor, js, scss );
 
 gulp.task( 'build', build );
+gulp.task( 'build:js', js );
 gulp.task( 'watch', watch );
 gulp.task( 'default', gulp.series( build, watch ) );

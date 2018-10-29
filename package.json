@@ -1,6 +1,6 @@
 {
   "name": "jarvis",
-  "version": "0.51.0",
+  "version": "1.0.0",
   "description": " Jarvis is your admin assistant, putting WordPress at your fingertips via a quicksearch interface.",
   "main": "index.js",
   "scripts": {
