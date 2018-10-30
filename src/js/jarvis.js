@@ -232,7 +232,7 @@ const Jarvis = ( function( $, _, Bloodhound ) {
 						case this.section.find('.wp-menu-image img').length > 0:
 							// img tag inside icon - old school
 							this.iconType = 'image';
-							this.icon = this.section.find('.wp-menu-image img').get(0).outerHTML;
+							this.icon = this.section.find('.wp-menu-image img').first().attr('src');
 							break;
 
 						case $wpMenuIcon.hasClass( 'svg' ):
