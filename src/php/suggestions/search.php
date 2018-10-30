@@ -134,8 +134,6 @@ class Search extends Action {
 			$query
 		);
 
-		echo $wpdb->prepare( $sql_query, $sql_prepared ); exit;
-
 		$query_results = $wpdb->get_results( $wpdb->prepare( $sql_query, $sql_prepared ) );
 
 		$results = [];
