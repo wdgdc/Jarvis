@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "gulp build",
+    "build:js": "gulp build:js",
+    "build:scss": "gulp build:scss",
     "watch": "gulp watch",
+    "vendor": "gulp vendor",
+    "release": "gulp release",
     "start": "gulp"
   },
   "repository": {
@@ -30,7 +34,8 @@
     "gulp-sass": "^4.0.1",
     "gulp-sass-glob": "^1.0.9",
     "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.1"
+    "gulp-uglify": "^3.0.1",
+    "gulp-zip": "^4.2.0"
   },
   "dependencies": {
     "typeahead.js": "^0.11.1"

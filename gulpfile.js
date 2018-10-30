@@ -10,17 +10,19 @@ const sass         = require('gulp-sass');
 const sassGlob     = require('gulp-sass-glob');
 const sourcemaps   = require('gulp-sourcemaps');
 const uglify       = require('gulp-uglify');
+const zip          = require('gulp-zip');
 
 const project = {
 	root: nodePath.posix.normalize(__dirname)
 };
 
-project.node   = nodePath.posix.normalize(`${project.root}/node_modules`);
-project.src    = nodePath.posix.normalize(`${project.root}/src`);
-project.js     = nodePath.posix.normalize(`${project.src}/js`);
-project.scss   = nodePath.posix.normalize(`${project.src}/scss`);
-project.dist   = nodePath.posix.normalize(`${project.root}/dist`);
-project.vendor = nodePath.posix.normalize(`${project.dist}/vendor`);
+project.node    = nodePath.posix.normalize(`${project.root}/node_modules`);
+project.src     = nodePath.posix.normalize(`${project.root}/src`);
+project.js      = nodePath.posix.normalize(`${project.src}/js`);
+project.scss    = nodePath.posix.normalize(`${project.src}/scss`);
+project.dist    = nodePath.posix.normalize(`${project.root}/dist`);
+project.vendor  = nodePath.posix.normalize(`${project.dist}/vendor`);
+project.release = nodePath.posix.normalize(`${project.dist}/release`);
 
 const banner = `/**
  * <%= package.name %> - <%= package.description %>
@@ -71,13 +73,39 @@ const vendor = () => {
 }
 
 const watch = () => {
-	gulp.watch( `${project.js}` + '/**/*.js', js );
-	gulp.watch( `${project.scss}` + '/**/*.scss', scss );
+	gulp.watch( `${project.js}/**/*.js`, js );
+	gulp.watch( `${project.scss}/**/*.scss`, scss );
+}
+
+const release = () => {
+	// exlude folders from being included like svn / git / node_modules
+	return gulp.src( [
+		`./**/*`,
+		`./**/.*`,
+		`!.git`,
+		`!.git/**/*`,
+		`!.svn`,
+		`!.svn/**/*`,
+		`!branches`,
+		`!branches/**/*`,
+		`!node_modules`,
+		`!node_modules/**/*`,
+		`!tags`,
+		`!tags/**/*`,
+		`!trunk`,
+		`!trunk/**/*`,
+		`!jarvis-release.zip`,
+	])
+	.pipe( zip( 'jarvis-release.zip' ) )
+	.pipe( gulp.dest( project.root ) );
 }
 
 const build = gulp.parallel( vendor, js, scss );
 
 gulp.task( 'build', build );
 gulp.task( 'build:js', js );
+gulp.task( 'build:scss`', scss );
+gulp.task( 'vendor', vendor );
 gulp.task( 'watch', watch );
+gulp.task( 'release', release );
 gulp.task( 'default', gulp.series( build, watch ) );

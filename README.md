@@ -73,6 +73,23 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
   * New gulp build pipeline
   * Remove Hogan in favor of underscore templates
 
+## Develop
+
+The plugin now uses a gulp based build pipeline that can be executed through npm scripts.
+
+* requires `node` 8 and `npm` 5 or higher, should work with `node` 6 but haven't tested
+* Public dependencies should be installed with npm using `npm i package-name --save`, while dev depenedencies like gulp should be installed with `npm i package-name --save-dev`
+
+### Commands
+
+* `npm run build:js` will compile javascript files using babel into the dist directory
+* `npm run build:scss` will compile scss files using sass & autoprefixer into the dist directory
+* `npm run vendor` will copy front end dependencies from node_modules to dist/vendor
+* `npm run build` will run the build:js, build:scss, and vendor tasks simultaneously
+* `npm run watch` will start watching for changes in js and scss files
+* `npm start` will run the build and vendor tasks simultaneously followed by the watch task - this is the default task
+* `npm run release` will create a zip the current build of the plugin to be included in a github release`
+
 ## Authors
 
 * David Everett

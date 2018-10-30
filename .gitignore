@@ -8,6 +8,9 @@ branches
 node_modules/
 dist/*
 
+# release (zip) files
+*.zip
+
 # common files
 Thumbs.db
 .DS_Store
