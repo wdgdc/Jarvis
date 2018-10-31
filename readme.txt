@@ -5,10 +5,10 @@ Plugin URI: http://wpjarvis.com
 Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
-Requires at least: 3.3
-Tested up to: 4.5.1
-Stable tag: 0.51.0
-Version: 0.51.0
+Requires at least: 4.8
+Tested up to: 4.9.8
+Stable tag: 1.0.0
+Version: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.webdevelopmentgroup.com
@@ -24,30 +24,35 @@ Once Jarvis is installed all you have to do to start using it is hit the quick k
 *   Access the settings for permalinks: `/` + `Permalinks` + enter and you're there.
 *   Edit your contact page: `/` + `Contact` + enter and you're there.
 *   Access your post about caving in Nigeria from last year: `/` + `Nigeria Caving` + enter and you're there.
+*   Flush the site rewrite rules: `/` + `Flush Rewrite Rules` + enter
 
 The idea is to make it easier for anyone using the admin side of WordPress to get to the pages they're looking for.
 
-Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com), our [web design process](http://www.webdevelopmentgroup.com/services/web-design) and [WordPress development experience](http://www.webdevelopmentgroup.com/services/wordpress-development).
+Each user can also cusomize their own quick key, and color scheme!
+
+Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com)
 
 
 == Installation ==
 
-1.   Upload the plugin folder to the /wp-content/plugins/ directory
-1.   Activate the plugin through the 'Plugins' menu in WordPress
-1.   Type `/` anywhere in the admin section of WordPress or click the Jarvis button in the toolbar.
-
+1. Upload the plugin folder to the /wp-content/plugins/ directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Type `/` anywhere in the admin section of WordPress or click the Jarvis button in the toolbar.
 or
 
 Install using the Plugin Installer.
 
-== Upgrade Notice ==
-
-You'll want to upgrade to this version, I guarantee it.
-
 == Screenshots ==
 
 1. First click the Jarvis button or hit the / button.
+
 2. Then start typing your search query. Results will show up below the search box.
+
+3. Ectoplasm theme - showing the Flush Rewrite Rules action
+
+4. View image thumbnails for both attachments and featured images
+
+5. Jarvis on mobile
 
 == Frequently Asked Questions ==
 
@@ -60,26 +65,42 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 == Changelog ==
 
-= 0.1 =
-* Internal testing at WDG.
+= 1.0.0 =
+* Rewrite most of Jarvis
+* New - User search
+* New - Mobile compatibility
+* New - Add Instant Actions that can be selected that are not in the admin menu
+* New - Nonce security for searches
+* New - Theme support!
+* Improved - icon detection methods such as dashicons with custom fonts
+* Improved - Hi-DPI loading icon
+* Drop support for IE < 11
+* New gulp build pipeline
+* Remove Hogan in favor of underscore templates
+* Removed - support for old versions of wordpress
+* Removed - support for IE < 11
 
-= 0.2 =
-* Official initial release.
+= 0.51.0 =
+* Add post type check to search query to only query post types shown in wp-admin
 
-= 0.3 =
-* Updated to work with dashicons of WP 3.8+
-* Use search icon instead of J as a more intuitive icon
-
-= 0.31 =
-* Quick bug fix for icon issue that lead to database results not being shown
+= 0.50.0 =
+* Refactored to use the latest Twitter Typeahead
 
 = 0.40 =
 * Code maintenance
 * Ability to search by post_id
 * add user setting for invoking jarvis
 
-= 0.50.0 =
-* Refactored to use the latest Twitter Typeahead
+= 0.31 =
+* Quick bug fix for icon issue that lead to database results not being shown
 
-= 0.51.0 =
-* Add post type check to search query to only query post types shown in wp-admin
+= 0.3 =
+* Updated to work with dashicons of WP 3.8+
+* Use search icon instead of J as a more intuitive icon
+
+= 0.2 =
+* Official initial release.
+
+= 0.1 =
+* Internal testing at WDG.
+

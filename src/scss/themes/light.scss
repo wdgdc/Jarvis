@@ -1,0 +1,24 @@
+@import 'jarvis-theme';
+
+$orange: #d64e07;
+$white: #ffffff;
+$blue: #04a4cc;
+$silver: #e5e5e5;
+$gray: #999999;
+
+@include jarvis-theme( (
+	hint-background: rgb( 235, 235, 235 ),
+	hint-text: rgb( 150, 150, 150 ),
+	input-text: inherit,
+	input-background: $silver,
+	loading-dot: $white,
+	loading: $orange,
+	menu-background: $white,
+	modal-background: $white,
+	overlay-background: rgba( $gray, .8 ),
+	suggestion-text: $blue,
+	suggestion-hover-background: rgba( $blue, .15 ),
+	suggestion-hover-text: $orange,
+	suggestion-focus-background: $blue,
+	suggestion-focus-text: $white,
+) );

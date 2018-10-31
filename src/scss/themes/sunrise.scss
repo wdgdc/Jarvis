@@ -1,0 +1,22 @@
+@import 'jarvis-theme';
+
+$maroon: #b43c38;
+$red: #cf4944;
+$orange: #dd823b;
+$gold: #ccaf0b;
+$white: #ffffff;
+
+@include jarvis-theme( (
+	hint-text: rgba( $maroon, .4 ),
+	input-text: $maroon,
+	input-background: darken( $white, 10% ),
+	loading-dot: $white,
+	loading: $orange,
+	menu-background: $maroon,
+	modal-background: $maroon,
+	overlay-background: rgba( $orange, .6 ),
+	suggestion-focus-background: $orange,
+	suggestion-hover-background: lighten( $orange, 10% ),
+	suggestion-text: $white,
+) );
+

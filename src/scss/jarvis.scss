@@ -1,0 +1,234 @@
+@keyframes jarvis-loading-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.jarvis {
+	&__overlay {
+		bottom:0;
+		left:0;
+		position:fixed;
+		right:0;
+		top:0;
+		z-index:100000;
+	}
+
+	&__modal {
+		border-radius: .5em;
+		box-sizing: border-box;
+		left: 50%;
+		max-width: 750px;
+		padding: 1em;
+		position: fixed;
+		top: 32px;
+		transform: translateX(-50%);
+		width: 96%;
+		z-index: 100001;
+	}
+
+	&__wrap {
+		width: 100%;
+	}
+
+	&__search {
+		width: 100%;
+	}
+
+	&__hint,
+	&__input {
+		border:none;
+		font-size:2em;
+		padding:.5em;
+		width:100%;
+	}
+
+	&__loading {
+		animation: jarvis-loading-spin 1000ms linear infinite;
+		// background: #808080;
+		border-radius: 50%;
+		height: 20px;
+		margin-top:-8px;
+		opacity: .7;
+		position:absolute;
+		right:20px;
+		top:50%;
+		width: 20px;
+
+		&::after {
+			content: '';
+			display: block;
+			height: 4px;
+			width: 4px;
+			// background: #ffffff;
+			position: absolute;
+			top: 2px;
+			left: 50%;
+			transform: translateX(-50%);
+			border-radius: 50%;
+		}
+	}
+
+	&__menu {
+		border-radius: .5em;
+		padding: 1em;
+		margin: 0 -1em 0 -1em;
+		width: 100%;
+
+		a {
+			display: flex;
+			align-items: center;
+			text-decoration: none;
+			padding:.5em;
+			border: 1px solid transparent;
+			position: relative;
+		}
+	}
+
+	&__suggestion {
+		overflow:hidden;
+
+		a {
+			border-radius:.5em;
+		}
+	}
+
+	&__cursor {
+		a {
+			&:hover {
+				border-color:rgb(209,218,225);
+			}
+		}
+	}
+
+	&__icon {
+		background-size: 28px 28px;
+		box-sizing: border-box;
+		flex: none;
+		height: 28px;
+		line-height: 28px;
+		margin-right: 8px;
+		text-align: left;
+		width: 28px;
+
+		svg,
+		img {
+			height: 24px;
+			width: 24px;
+			margin: 2px;
+		}
+
+		svg {
+			path {
+				fill: currentColor;
+			}
+		}
+
+		&.dashicons-before {
+			background: none;
+			padding-top: 2px;
+			padding-bottom: 2px;
+
+			&:before {
+				height: 24px;
+				width: 24px;
+				font-size: 24px;
+				line-height: 24px;
+			}
+		}
+	}
+
+	&__title {
+		display: block;
+		line-height: 28px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		flex: 1;
+	}
+
+	&__pills {
+		display: block;
+		flex: none;
+		font-size: .8em;
+		opacity: .75;
+		pointer-events: none;
+		text-transform: uppercase;
+		user-select: none;
+		white-space: nowrap;
+	}
+
+	&__pill {
+		padding: 1px 3px;
+		border: 1px solid;
+		border-radius: 2px;
+	}
+}
+
+input[name="jarvis_hotkey"] {
+	text-align: center;
+	max-width: 30px;
+
+	&:focus {
+		background-color: gray;
+		color: white;
+	}
+
+	&::selection {
+		background-color: transparent;
+	}
+
+	@media screen and ( max-width: 782px ) {
+		width: auto;
+	}
+}
+
+#wpadminbar {
+	#wp-admin-bar-jarvis_menubar_icon {
+		display: block;
+
+		.ab-item {
+			text-align: center;
+
+			span {
+				position:absolute;
+				top:-4em;
+				white-space:nowrap;
+			}
+
+			&::before {
+				-moz-osx-font-smoothing: grayscale;
+				content: "\f179";
+				display: inline-block;
+				float: none;
+				font-family: dashicons;
+				font-size: 20px;
+				font-style: normal;
+				font-weight: 400;
+				height: 20px;
+				line-height: 1;
+				margin-right: 0;
+				text-align: center;
+				text-decoration: inherit;
+				vertical-align: -5px;
+				width: 20px;
+			}
+		}
+
+		@media screen and ( max-width: 782px ) {
+			.ab-item {
+				width: 46px;
+
+				&::before {
+					font-size: 32px;
+					height: 20px;
+					vertical-align: -10px;
+					width: 28px;
+				}
+			}
+		}
+	}
+}

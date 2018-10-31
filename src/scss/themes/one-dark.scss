@@ -1,0 +1,18 @@
+@import 'jarvis-theme';
+
+@include jarvis-theme( (
+	hint-text: rgba( 255, 255, 255, .4 ),
+	input-text: rgb( 200, 200, 200 ),
+	input-background: darken( #282c34, 5% ),
+	loading-dot: rgb( 100, 100, 100 ),
+	loading: rgb( 200, 200, 200 ),
+	menu-background: #282c34,
+	modal-background: #282c34,
+	overlay-background: rgba( #282c34, .85 ),
+	suggestion-focus-background: rgba( 255, 255, 255, .2 ),
+	suggestion-focus-text: rgb( 200, 200, 200 ),
+	suggestion-hover-background: rgba( 255, 255, 255, .08 ),
+	suggestion-hover-text: rgb( 200, 200, 200 ),
+	suggestion-text: rgb( 200, 200, 200 ),
+) );
+

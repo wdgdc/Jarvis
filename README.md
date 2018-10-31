@@ -13,6 +13,7 @@ Once Jarvis is installed all you have to do to start using it is hit the quick k
 * Access the settings for permalinks: `/` + `Permalinks` + enter and you're there.
 * Edit your contact page: `/` + `Contact` + enter and you're there.
 * Access your post about caving in Nigeria from last year: `/` + `Nigeria Caving` + enter and you're there.
+* Flush the site rewrite rules: `/` + `Flush Rewrite Rules` + enter
 
 The idea is to make it easier for anyone using the admin side of WordPress to get to the pages they're looking for.
 
@@ -34,7 +35,11 @@ Hit the `/` key in the admin section or click the Jarvis button in the admin too
 
 ### It's still not working...
 
-You may be on a page that's focusing on a text area or input box. If this is the case just click somewhere on the page outside of these boxes and the hit /.
+You may be on a page that's focusing on a text area or input box. If this is the case just click somewhere on the page outside of these boxes and the hit /. You can also click the search icon next to the avatar in the top admin menu bar.
+
+## Extend
+
+Jarvis is extendable to include your custom plugin data though filters.  See https://github.com/WDGDC/Jarvis/wiki/Extending-Jarvis
 
 ## Changelog
 
@@ -55,12 +60,41 @@ You may be on a page that's focusing on a text area or input box. If this is the
   * Refactored to use the latest Twitter Typeahead
 7. 0.51.0
   * Add post type check to search query to only query post types shown in wp-admin
+8. 1.0.0
+  * Rewrite most of Jarvis
+  * User search
+  * Mobile compatibility
+  * Add Instant Actions that can be selected that are not in the admin menu
+  * Nonce security for searches
+  * Theme support!
+  * Improved icon detection methods such as dashicons with custom fonts
+  * Hi-DPI loading icon
+  * Drop support for IE < 11
+  * New gulp build pipeline
+  * Remove Hogan in favor of underscore templates
 
+## Develop
+
+The plugin now uses a gulp based build pipeline that can be executed through npm scripts.
+
+* requires `node` 8 and `npm` 5 or higher, should work with `node` 6 but haven't tested
+* Public dependencies should be installed with npm using `npm i package-name --save`, while dev depenedencies like gulp should be installed with `npm i package-name --save-dev`
+
+### Commands
+
+* `npm run build:js` will compile javascript files using babel into the dist directory
+* `npm run build:scss` will compile scss files using sass & autoprefixer into the dist directory
+* `npm run vendor` will copy front end dependencies from node_modules to dist/vendor
+* `npm run build` will run the build:js, build:scss, and vendor tasks simultaneously
+* `npm run watch` will start watching for changes in js and scss files
+* `npm start` will run the build and vendor tasks simultaneously followed by the watch task - this is the default task
+* `npm run release` will create a zip the current build of the plugin to be included in a github release`
 
 ## Authors
 
 * David Everett
 * Joan Piedra
 * Kurtis Shaner
+* Doug Axelrod
 
 Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com), our [services](www.webdevelopmentgroup.com/services/) and [WordPress work](http://www.webdevelopmentgroup.com/work/).

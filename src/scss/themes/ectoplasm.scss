@@ -1,0 +1,20 @@
+@import 'jarvis-theme';
+
+$purple: #413256;
+$green: #a3b745;
+$white: #ffffff;
+$orange: #d46f15;
+
+@include jarvis-theme( (
+	loading-dot: $white,
+	loading: $orange,
+	menu-background: $purple,
+	modal-background: $purple,
+	overlay-background: rgba( $green, .7 ),
+	suggestion-focus-background: $green,
+	suggestion-focus-text: $white,
+	suggestion-hover-background: $purple,
+	suggestion-hover-text: $orange,
+	suggestion-text: $white,
+) );
+

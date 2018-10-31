@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+@mixin jarvis-theme( $colors: () ) {
+
+	$colors: map-merge( (
+		hint-background: rgb( 235, 235, 235 ),
+		hint-text: rgb( 150, 150, 150 ),
+		input-background: #ebebeb,
+		input-text: inherit,
+		loading-dot: #ffffff,
+		loading: #808080,
+		menu-background: rgb(255, 255, 255),
+		modal-background: rgb(255, 255, 255),
+		overlay-background: rgba( 0, 0, 0, .7 ),
+		suggestion-focus: rgba( 255, 255, 255, .2 ),
+		suggestion-hover: rgba( 255, 255, 255, .08 ),
+		suggestion-text: inherit,
+	), $colors );
+
+	.jarvis {
+		@if map-get( $colors, overlay-background ) {
+			&__overlay {
+				background-color: map-get( $colors, overlay-background );
+			}
+		}
+
+		@if map-get( $colors, modal-background ) {
+			&__modal {
+				background-color: map-get( $colors, modal-background );
+			}
+		}
+
+		@if map-get( $colors, menu-background ) {
+			&__menu {
+				background-color: map-get( $colors, menu-background );
+			}
+		}
+
+		&__suggestion {
+			a {
+				@if map-get( $colors, suggestion-text ) {
+					color: map-get( $colors, suggestion-text );
+				}
+
+				&:hover {
+					@if map-get( $colors, suggestion-hover-background ) {
+						background-color: map-get( $colors, suggestion-hover-background );
+					}
+
+					@if map-get( $colors, suggestion-hover-text ) {
+						color: map-get( $colors, suggestion-hover-text);
+					}
+				}
+			}
+		}
+
+		&__cursor {
+			a {
+				@if map-get( $colors, suggestion-focus-background ) {
+					background-color: map-get( $colors, suggestion-focus-background );
+
+					&:hover {
+						background-color: map-get( $colors, suggestion-focus-background );
+					}
+				}
+				@if map-get( $colors, suggestion-focus-text ) {
+					color: map-get( $colors, suggestion-focus-text );
+				}
+			}
+		}
+
+		&__hint[type="text"] {
+			@if map-get( $colors, input-background ) {
+				background-color: map-get( $colors, input-background ) !important; // overriding typeahead's inline style
+			}
+			@if map-get( $colors, hint-text ) {
+				color: map-get( $colors, hint-text );
+			}
+		}
+
+		&__input[type="text"] {
+			@if map-get( $colors, input-text ) {
+				color: map-get( $colors, input-text );
+			}
+		}
+
+		&__loading {
+			@if map-get( $colors, loading ) {
+				background-color: map-get( $colors, loading );
+			}
+
+			@if map-get( $colors, loading-dot ) {
+				&::after {
+					background-color: map-get( $colors, loading-dot );
+				}
+			}
+		}
+	}
+}
