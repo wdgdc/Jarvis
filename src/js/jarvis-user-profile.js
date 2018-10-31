@@ -41,21 +41,35 @@ Jarvis.UserProfile = ( function( $ ) {
 
 			if ( this.jarvisThemeSelect ) {
 				this.jarvisThemeSelect.addEventListener( 'change', () => {
-					this.changeScheme( this.jarvisThemeSelect.value );
+					let scheme;
+					if ( this.matchColorScheme() ) {
+						scheme = document.querySelector('#color-picker input[type="radio"]:checked').value;
+					} else {
+						scheme = this.jarvisThemeSelect.value
+					}
+
+					this.changeScheme( scheme );
 				});
 			}
 
 			$('#color-picker').on( 'click.colorpicker', '.color-option', (e) => {
-				if ( this.jarvisThemeSelect.value === '' ) {
-					this.changeScheme( $(e.currentTarget).find( 'input[type="radio"]' ).val() );
+				if ( this.matchColorScheme() ) {
+					this.changeScheme( e.currentTarget.querySelector( 'input[type="radio"]' ).value );
 				}
 			} );
 		}
 
 		changeScheme( scheme ) {
 			if ( this.jarvisThemeCss ) {
-				this.jarvisThemeCss.href = `${this.options.jarvisUri}/dist/themes/${scheme}.css?ver=${this.options.version}`;
+				let themeOption = this.jarvisThemeSelect.querySelector( `option[value="${scheme}"]` );
+				if ( themeOption ) {
+					this.jarvisThemeCss.href = themeOption.getAttribute('data-uri');
+				}
 			}
+		}
+
+		matchColorScheme() {
+			return [ '', 'wp' ].indexOf( this.jarvisThemeSelect.value ) > -1;
 		}
 	}
 

@@ -35,7 +35,7 @@ class Plugin {
 	 * @access private
 	 */
 	private $themes = [
-		''                => 'Match WordPress Theme',
+		'wp'              => 'Match WordPress Theme',
 		'fresh'           => 'Fresh',
 		'light'           => 'Light',
 		'blue'            => 'Blue',
@@ -58,7 +58,7 @@ class Plugin {
 		'hotkey'    => '/',
 		'nonce'     => null,
 		'searchurl' => '/wp-json/jarvis/v1/search',
-		'theme'     => 'fresh',
+		'theme'     => 'wp',
 	];
 
 	/**
@@ -113,6 +113,17 @@ class Plugin {
 	 */
 	public function admin_init() {
 		$this->get_instants();
+
+		/**
+		 * filter the list of themes to add custom themes or remove themes
+		 *
+		 * @name jarvis/themes
+		 * @param array - list of built in themes
+		 * @return array
+		 *
+		 * @since 1.0.0
+		 */
+		$this->themes = apply_filters( 'jarvis/themes', $this->themes );
 	}
 
 	/**
@@ -164,6 +175,65 @@ class Plugin {
 	}
 
 	/**
+	 * Get the current theme
+	 *
+	 * @param bool - whether to apply the admin color or only get the user theme
+	 * @return string
+	 */
+	private function get_theme( $admin_color = true ) {
+
+		/**
+		 * Filter the default theme
+		 *
+		 * @name jarvis/theme_default
+		 * @param string default theme of 'wp' which matches the wordpress color scheme
+		 * @return string
+		 *
+		 * @since 1.0.0
+		 */
+		$default = apply_filters( 'jarvis/theme_default', 'wp' );
+		$theme   = get_user_meta( get_current_user_id(), 'jarvis_theme', true );
+
+		if ( empty( $theme ) ) {
+			$theme = $default;
+		}
+
+		if ( true === $admin_color && 'wp' === $theme ) {
+			$theme = get_user_option( 'admin_color' );
+		}
+
+		return $theme;
+	}
+
+	/**
+	 * Get the full uri for a theme stylesheet
+	 *
+	 * @param string $theme
+	 * @return string
+	 *
+	 * @access private
+	 */
+	private function get_theme_uri( $theme ) {
+
+		/**
+		 * Filter the css uri for a custom theme with a theme specific filter name
+		 *
+		 * @name jarvis/theme/theme-name from $this->themes
+		 * @param string $theme_css_uri - the full url to the css file for the custom theme
+		 * @return string
+		 *
+		 * @since 1.0.0
+		 */
+		$theme_css_uri = apply_filters( 'jarvis/theme/' . $theme, JARVIS_URI . '/dist/themes/'. $theme .'.css' );
+
+		if ( empty( $theme_css_uri ) || ! preg_match( '/\.css$/', strval( $theme_css_uri ) ) ) {
+			$theme_css_uri = JARVIS_URI . '/dist/themes/fresh.css';
+		}
+
+		return $theme_css_uri;
+	}
+
+	/**
 	 * Build our options to pass into the javascript constructor
 	 *
 	 * @return array
@@ -176,22 +246,10 @@ class Plugin {
 		}
 
 		$this->options = array_merge( $this->options, [
-			'nonce'   => wp_create_nonce( 'wp_rest' ), // use wp_rest since we're using the rest api and relying on their nonces
-			'searchurl' => rest_url( Suggestions\Search::REST_PREFIX . '/search' )
+			'nonce'     => wp_create_nonce( 'wp_rest' ),  // use wp_rest since we're using the rest api and relying on their nonces
+			'searchurl' => rest_url( Suggestions\Search::REST_PREFIX . '/search' ),
+			'theme'     => $this->get_theme(),
 		] );
-
-		// filter the list of themes to add custom themes or remove themes
-		$this->themes = apply_filters( 'jarvis/themes', $this->themes );
-
-		// user theme preference or current admin color
-		if ( ! $theme = get_user_meta( get_current_user_id(), 'jarvis_theme', true ) ) {
-			$theme = get_user_option( 'admin_color' );
-		}
-
-		// if it's a supported theme, add it to the options
-		if ( ! empty( $theme ) && in_array( $theme, array_keys( $this->themes ), true ) ) {
-			$this->options['theme'] = $theme;
-		}
 
 		// user hotkey preference
 		if ( $user_hotkey = get_user_meta( get_current_user_id(), 'jarvis_hotkey', true ) ) {
@@ -239,7 +297,7 @@ class Plugin {
 	 * @action show_user_profile, edit_user_profile
 	 */
 	public function show_user_profile( $user ) {
-		$user_theme = get_user_meta( $user->ID, 'jarvis_theme', true );
+		$user_theme = $this->get_theme( false );
 		?>
 		<h3>Jarvis</h3>
 
@@ -257,7 +315,7 @@ class Plugin {
 					<p>
 						<select name="jarvis_theme" class="regular-text">
 							<?php foreach( $this->themes as $theme => $label ) : ?>
-							<option value="<?php echo esc_attr( $theme ); ?>"<?php if ( $theme === $user_theme ) echo ' selected'; ?>><?php echo esc_html( $label ); ?></option>
+							<option data-uri="<?php echo esc_attr( $this->get_theme_uri( $theme ) ); ?>" value="<?php echo esc_attr( $theme ); ?>"<?php if ( $theme === $user_theme ) echo ' selected'; ?>><?php echo esc_html( $label ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</p>
@@ -295,7 +353,7 @@ class Plugin {
 		wp_add_inline_script( 'wp-jarvis', 'window.jarvis = new Jarvis('. wp_json_encode( $this->options, ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) ) .', ' . wp_json_encode( $this->get_suggestions(), ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) ) . ');', 'after' );
 
 		wp_enqueue_style( 'wp-jarvis', JARVIS_URI . '/dist/jarvis.css', [], self::VERSION, 'screen' );
-		wp_enqueue_style( 'wp-jarvis-theme', JARVIS_URI . '/dist/themes/'. $this->options['theme'] .'.css', [], self::VERSION, 'screen' );
+		wp_enqueue_style( 'wp-jarvis-theme', $this->get_theme_uri( $this->options['theme'] ), [], self::VERSION, 'screen' );
 
 		if ( 'profile' === get_current_screen()->id ) {
 			wp_enqueue_script( 'wp-jarvis-user-profile', JARVIS_URI . '/dist/jarvis-user-profile.js', array( 'jquery', 'wp-jarvis' ), self::VERSION, true );
