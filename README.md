@@ -97,4 +97,4 @@ The plugin now uses a gulp based build pipeline that can be executed through npm
 * Kurtis Shaner
 * Doug Axelrod
 
-Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com), our [services](www.webdevelopmentgroup.com/services/) and [WordPress work](http://www.webdevelopmentgroup.com/work/).
+Learn more about [The Web Development Group](http://www.webdevelopmentgroup.com), our [services](https://www.webdevelopmentgroup.com/services/) and [WordPress work](http://www.webdevelopmentgroup.com/work/).
