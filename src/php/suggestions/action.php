@@ -10,8 +10,6 @@ class Action {
 	protected $rest_methods = [];
 	protected $rest_args = [];
 
-	public function __construct() {}
-
 	public function register_rest_route() {
 		if ( ! empty( $this->rest_route ) ) {
 			register_rest_route( self::REST_PREFIX, '/' . $this->rest_route . '/', [

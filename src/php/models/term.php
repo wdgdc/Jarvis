@@ -24,6 +24,8 @@ class Term extends Model {
 				$this->iconKey  = is_taxonomy_hierarchical( $term->taxonomy ) ? 'category' : 'post_tag';
 			break;
 		}
+
+		parent::__construct();
 	}
 
 }

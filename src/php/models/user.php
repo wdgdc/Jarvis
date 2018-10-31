@@ -26,5 +26,7 @@ class User extends Model {
 		} else {
 			$this->icon = 'dashicons-users';
 		}
+
+		parent::__construct();
 	}
 }

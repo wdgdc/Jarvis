@@ -63,4 +63,27 @@ class Model {
 	 * The icon key that will be used in grabbing the icon from the front end, ususually a post_type or a menu item id
 	 */
 	public $iconKey = 'dashicons-arrow-right-alt2';
+
+	/**
+	 * Allow customization of models - Subclasses should call this at the end of their construct
+	 */
+	public function __construct() {
+		/**
+		 * Add an action for all models
+		 *
+		 * @name jarvis/model
+		 * @param Jarvis\Models\Model
+		 * @since 1.0.0
+		 */
+		do_action( 'jarvis/model', $this );
+
+		/**
+		 * Add an action for specific model
+		 *
+		 * @name jarvis/model/name-of-subclass-lowercase
+		 * @param mixed subclass of Jarvis\Models\Model
+		 * @since 1.0.0
+		 */
+		do_action( 'jarvis/model/' . strtolower( get_called_class() ), $this );
+	}
 }
