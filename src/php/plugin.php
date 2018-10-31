@@ -164,7 +164,17 @@ class Plugin {
 	 */
 	private function get_instants() {
 		if ( empty( $this->instants ) ) {
-			$this->_instants = apply_filters( 'jarvis/instants', $this->_instants );
+
+			/**
+			 * filter the list of instant classes that provide instant suggestions through their `get` method
+			 *
+			 * @name jarvis/instants
+			 * @param array $this->_instants - list of class name strings
+			 * @return array
+			 *
+			 * @since 1.0.0
+			 */
+			 $this->_instants = apply_filters( 'jarvis/instants', $this->_instants );
 
 			foreach( $this->_instants as $instant ) {
 				$this->instants[ $instant ] = new $instant;
@@ -280,6 +290,15 @@ class Plugin {
 			$this->suggestions = array_merge( $this->suggestions, $instant_suggestions );
 		}
 
+		/**
+		 * filter the instant suggestions list
+		 *
+		 * @name jarvis/suggestions
+		 * @param array $this->suggestions - modeled suggestions - all suggestions should extend Jarvis/models/model
+		 * @return array
+		 *
+		 * @since 1.0.0
+		 */
 		$this->suggestions = apply_filters( 'jarvis/suggestions', $this->suggestions );
 
 		if ( empty( $this->suggestions ) || ! is_array( $this->suggestions ) ) {
@@ -369,6 +388,11 @@ class Plugin {
 	 * @action admin_bar_menu
 	 */
 	public function admin_bar_menu( $admin_bar ) {
+
+		// we'll remove this condition when we support front end searches
+		if ( ! is_admin() ) {
+			return;
+		}
 
 		$admin_bar->add_menu( [
 			'id' => 'jarvis_menubar_icon',
