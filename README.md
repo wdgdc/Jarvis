@@ -72,6 +72,8 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
   * Drop support for IE < 11
   * New gulp build pipeline
   * Remove Hogan in favor of underscore templates
+9. 1.0.1
+  * Fix an installation issue some users were reporting
 
 ## Develop
 

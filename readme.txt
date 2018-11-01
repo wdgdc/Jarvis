@@ -7,8 +7,8 @@ Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 4.8
 Tested up to: 4.9.8
-Stable tag: 1.0.0
-Version: 1.0.0
+Stable tag: 1.0.1
+Version: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.webdevelopmentgroup.com
@@ -64,6 +64,9 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix an installation issue some users were reporting
 
 = 1.0.0 =
 * Rewrite most of Jarvis
