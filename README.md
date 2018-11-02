@@ -74,6 +74,8 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
   * Remove Hogan in favor of underscore templates
 9. 1.0.1
   * Fix an installation issue some users were reporting
+10. 1.0.2
+  * Send attachment suggestions to the 'Edit more details' page instead of the grid view as wp.media-grid throws an error if the item is not already loaded in the grid
 
 ## Develop
 

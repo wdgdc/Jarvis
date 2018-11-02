@@ -13,16 +13,14 @@ class Post extends Model {
 		$this->slug    = $post->post_name;
 		$this->kind    = 'post';
 		$this->iconKey = $post->post_type;
+		$this->href    = admin_url( sprintf( 'post.php?post=%d&action=edit', $this->id ) );
 
 		if ( 'attachment' === $this->type ) {
 
-			$this->href     = admin_url( sprintf( 'upload.php?item=%d', $this->id ) );
 			$this->iconType = 'image';
 			$this->icon     = wp_get_attachment_image_src( $this->id, 'thumbnail' )[0];
 
 		} else {
-
-			$this->href  = admin_url( sprintf( 'post.php?post=%d&action=edit', $this->id ) );
 
 			if ( has_post_thumbnail( $this->id ) ) {
 				$this->iconType = 'image';
