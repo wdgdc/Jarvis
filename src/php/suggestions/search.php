@@ -22,14 +22,53 @@ class Search extends Action {
 		$query_esc_like = $wpdb->esc_like( $query );
 		$query_esc_like_spaces = '%' . str_replace( ' ', '%', $query_esc_like ) . '%';
 
+		/**
+		 * filter the post types that are used in the search query
+		 *
+		 * @name jarvis/include_post_types
+		 * @param array - list of post types [ defaults to post types where show_ui == true ]
+		 * @return array
+		 *
+		 * @since 1.0.0
+		 */
 		$post_types = apply_filters( 'jarvis/include_post_types', array_values( get_post_types( [ 'show_ui' => true ] ) ) );
 		$post_types_sql = "'" . implode( "','", $post_types ) . "'";
 
+		/**
+		 * exclude post stati from the search query
+		 *
+		 * @name jarvis/exclude_post_stati
+		 * @param array - list of excluded post stati [ defaults to revision, auto-draft, trash ]
+		 * @return array
+		 *
+		 * @since 1.0.0
+		 */
 		$post_stati_exclude = apply_filters( 'jarvis/exclude_post_stati', [ 'revision', 'auto-draft', 'trash' ] );
 		$post_stati_exclude_sql = "'" . implode( "','", $post_stati_exclude ) . "'";
 
+		/**
+		 * exclude post ids from the search query
+		 *
+		 * @name jarvis/exclude_post_ids
+		 * @param array - list of post ids
+		 * @return array
+		 *
+		 * @since 1.0.0
+		 */
 		$post_exclude = apply_filters( 'jarvis/exclude_post_ids', [] );
 		$post_exclude_sql = "'" . implode("','", $post_exclude ) . "'";
+
+		/**
+		 * taxonmies whose terms are included in the search query
+		 *
+		 * @name jarvis/taxonomies
+		 * @param array - list of taxonomies [ defaults to where taxonomies show_ui == true ]
+		 * @return array
+		 *
+		 * @since 1.0.3
+		 */
+		$taxonomies = apply_filters( 'jarvis/taxonomies', array_values( get_taxonomies( [ 'show_ui' => true ] ) ) );
+		$taxonomies_sql = "'" . implode( "','", $taxonomies ) . "'";
 
 		$sql_query = "SELECT
 				$wpdb->terms.term_id as 'id',
@@ -46,13 +85,17 @@ class Search extends Action {
 				$wpdb->terms
 			INNER JOIN
 				$wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
-			WHERE (
-				$wpdb->terms.`name` LIKE %s
-				OR
-				$wpdb->terms.slug LIKE %s
-			)
-			OR
-				$wpdb->terms.term_id = %s
+			WHERE
+				$wpdb->term_taxonomy.taxonomy IN ($taxonomies_sql)
+				AND	(
+					(
+						$wpdb->terms.`name` LIKE %s
+						OR
+						$wpdb->terms.slug LIKE %s
+					)
+					OR
+					$wpdb->terms.term_id = %s
+				)
 		UNION
 			SELECT
 				$wpdb->posts.ID as 'id',

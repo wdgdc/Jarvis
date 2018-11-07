@@ -76,6 +76,8 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
   * Fix an installation issue some users were reporting
 10. 1.0.2
   * Send attachment suggestions to the 'Edit more details' page instead of the grid view as wp.media-grid throws an error if the item is not already loaded in the grid
+11. 1.0.3
+  * exclude hidden taxonomies from the search results and implement a new jarvis/taxonomies filter the list of taxonomies to be included in the search
 
 ## Develop
 
