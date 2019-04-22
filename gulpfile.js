@@ -97,7 +97,7 @@ const release = () => {
 		`!trunk/**/*`,
 		`!jarvis-release.zip`,
 	])
-	.pipe( zip( 'jarvis-release.zip' ) )
+	.pipe( zip( 'jarvis.zip' ) )
 	.pipe( gulp.dest( project.root ) );
 }
 
