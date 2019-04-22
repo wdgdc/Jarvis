@@ -132,7 +132,6 @@ class Plugin {
 		add_action( 'personal_options_update', [ $this, 'edit_user_profile_update' ] );
 		add_action( 'rest_api_init', [ $this, 'rest_api_init' ], 20 );
 		add_action( 'show_user_profile', [ $this, 'show_user_profile' ] );
-		add_action( 'wp_ajax_jarvis-search', [ $this, 'get_search_results' ] , 1 );
 	}
 
 	/**
