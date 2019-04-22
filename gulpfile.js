@@ -41,7 +41,8 @@ const js = () => {
 				[
 					'@babel/preset-env',
 					{
-						"useBuiltIns": "entry"
+						'useBuiltIns': 'entry',
+						'corejs': '3.0.0'
 					}
 				]
 			]
