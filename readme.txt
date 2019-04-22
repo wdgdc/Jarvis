@@ -6,9 +6,9 @@ Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 4.8
-Tested up to: 4.9.8
-Stable tag: 1.0.3
-Version: 1.0.3
+Tested up to: 5.1.1
+Stable tag: 1.0.4
+Version: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.webdevelopmentgroup.com
@@ -64,6 +64,9 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 
 == Changelog ==
+
+= 1.0.4 =
+* fix the autoloader to support web roots with underscore characters
 
 = 1.0.3 =
 * exclude hidden taxonomies from the search results and implement a new jarvis/taxonomies filter the list of taxonomies to be included in the search

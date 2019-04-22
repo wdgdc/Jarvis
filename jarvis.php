@@ -3,7 +3,7 @@
 Plugin Name: Jarvis
 Plugin URI: http://www.wpjarvis.com
 Description: Jarvis is your administration assistant, putting WordPress at your fingertips.
-Version: 1.0.3
+Version: 1.0.4
 Author:	The Web Development Group, David Everett, Joan Piedra, Kurtis Shaner, Doug Axelrod
 Author URI: http://www.wdg.co
 License: GPLv2 or later

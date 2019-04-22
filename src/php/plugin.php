@@ -7,7 +7,7 @@ class Plugin {
 	/**
 	 * Le version of le plugin
 	 */
-	const VERSION = '1.0.3';
+	const VERSION = '1.0.4';
 
 	/**
 	 * Holds our plugin instance
