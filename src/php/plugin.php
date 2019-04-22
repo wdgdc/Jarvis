@@ -88,11 +88,42 @@ class Plugin {
 	private $instants = [];
 
 	/**
+	 * This is the auto loader for all classes in the current namespace
+	 * All file names must be kebab-cased and class names Snake_Cased
+	 *
+	 * @param string $class_name
+	 * @return void
+	 * @access public
+	 */
+	public static function autoload( $class_name ) {
+		if ( ! preg_match( '/^' . preg_quote( __NAMESPACE__, '/' ) . '/', $class_name ) ) {
+			return;
+		}
+
+		// remove namespace from classname
+		$path = preg_replace( '/^' . preg_quote( __NAMESPACE__, '/' ) . '/', '', $class_name );
+		// replace \ with / and  _ with -
+		$path = str_replace( [ '\\', '_' ], [ '/', '-' ], $path );
+		// convert to lowercase
+		$path = strtolower( $path );
+		// add php extension
+		$path = $path . '.php';
+
+		// prepend current dir
+		$path = __DIR__ . $path;
+
+		if ( file_exists( $path ) ) {
+			require_once $path;
+		}
+	}
+
+	/**
 	 * Add our wordpress hooks
 	 *
 	 * @access private
 	 */
 	private function __construct() {
+		spl_autoload_register( [ __CLASS__, 'autoload' ] );
 		add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ] , 100 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
 		add_action( 'admin_init', [ $this, 'admin_init' ], 20 );
