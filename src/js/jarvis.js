@@ -133,7 +133,7 @@ const Jarvis = ( function( $, _, Bloodhound ) {
 		 */
 		setIcon( iconKey = '' ) {
 			// image icon - usually unique per suggestion - no reason to cache it
-			if ( this.iconType === 'image' && this.icon.length > 0 ) {
+			if ( this.iconType === 'image' && this.icon ) {
 				return;
 			}
 
