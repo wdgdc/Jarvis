@@ -7,7 +7,7 @@ class Plugin {
 	/**
 	 * Le version of le plugin
 	 */
-	const VERSION = '1.0.5';
+	const VERSION = '1.0.6';
 
 	/**
 	 * Holds our plugin instance
@@ -212,7 +212,7 @@ class Plugin {
 			foreach( $this->_instants as $instant_class ) {
 				$instant = new $instant_class();
 
-				if ( current_user_can( $instant->capability() ) ) {
+				if ( $instant->current_user_can() ) {
 					$this->instants[ $instant_class ] = $instant;
 				}
 			}

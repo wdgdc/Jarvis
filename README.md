@@ -85,6 +85,8 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
   * Update build dependencies
   * Add permission_callback on rest api routes for 5.5 update
   * Add capability checks to instant actions
+14. 1.0.6
+  * Hotfix for missing svn change
 
 
 ## Develop

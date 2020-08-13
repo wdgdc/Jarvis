@@ -7,8 +7,8 @@ Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 4.8
 Tested up to: 5.5.0
-Stable tag: 1.0.5
-Version: 1.0.5
+Stable tag: 1.0.6
+Version: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.webdevelopmentgroup.com
@@ -64,6 +64,9 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 
 == Changelog ==
+
+= 1.0.6 =
+* Hotfix for missing svn change
 
 = 1.0.5 =
 * Update build dependencies
