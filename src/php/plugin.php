@@ -170,12 +170,15 @@ class Plugin {
 
 		$this->get_instants();
 
-		register_rest_route( Suggestions\Action::REST_PREFIX, '/search/', [
+		register_rest_route(
+			Suggestions\Action::REST_PREFIX, '/search/', [
 			'methods' => 'GET',
 			'callback' => function( $request ) {
 				return ( new Suggestions\Search() )->get( $request->get_param( 'q' ) );
-			}
-		] );
+				},
+				'permission_callback' => 'is_user_logged_in',
+			]
+		);
 
 		if ( ! empty( $this->instants ) ) {
 			foreach( $this->instants as $instant ) {
@@ -206,8 +209,12 @@ class Plugin {
 			 */
 			 $this->_instants = apply_filters( 'jarvis/instants', $this->_instants );
 
-			foreach( $this->_instants as $instant ) {
-				$this->instants[ $instant ] = new $instant;
+			foreach( $this->_instants as $instant_class ) {
+				$instant = new $instant_class();
+
+				if ( current_user_can( $instant->capability() ) ) {
+					$this->instants[ $instant_class ] = $instant;
+				}
 			}
 		}
 

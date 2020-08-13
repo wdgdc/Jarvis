@@ -9,6 +9,10 @@ namespace Jarvis\Suggestions;
  */
 class Recent {
 
+	public function current_user_can() {
+		return current_user_can( 'edit_posts' );
+	}
+
 	public function get() {
 		$posts = [];
 
@@ -21,14 +25,17 @@ class Recent {
 		 *
 		 * @since 1.0.0
 		 */
-		$query_args = apply_filters( 'jarvis/suggestions/recent/query', [
-			'post_type'      => get_post_types( ['show_ui' => true ], 'names' ),
-			'posts_per_page' => 10,
-			'author'         => get_current_user_id(),
-			'orderby'        => 'modified',
-			'order'          => 'DESC',
-			'fields'         => 'ids',
-		] );
+		$query_args = apply_filters(
+			'jarvis/suggestions/recent/query',
+			[
+				'post_type'      => get_post_types( ['show_ui' => true ], 'names' ),
+				'posts_per_page' => 10,
+				'author'         => get_current_user_id(),
+				'orderby'        => 'modified',
+				'order'          => 'DESC',
+				'fields'         => 'ids',
+			]
+		);
 
 		$query = new \WP_Query( $query_args );
 
