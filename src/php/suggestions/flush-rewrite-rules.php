@@ -8,6 +8,10 @@ class Flush_Rewrite_Rules extends Action {
 	protected $rest_args = [];
 	protected $rest_methods = [ 'GET' ];
 
+	public function current_user_can() {
+		return current_user_can( 'manage_options' );
+	}
+
 	public function get() {
 		$action = new \Jarvis\Models\Action();
 
