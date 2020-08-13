@@ -6,9 +6,9 @@ Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 4.8
-Tested up to: 5.1.1
-Stable tag: 1.0.4
-Version: 1.0.4
+Tested up to: 5.5.0
+Stable tag: 1.0.5
+Version: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.webdevelopmentgroup.com
@@ -64,6 +64,11 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 
 == Changelog ==
+
+= 1.0.5 =
+* Update build dependencies
+* Add permission_callback on rest api routes for 5.5 update
+* Add capability checks to instant actions
 
 = 1.0.4 =
 * fix the autoloader to support web roots with underscore characters

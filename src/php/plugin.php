@@ -7,7 +7,7 @@ class Plugin {
 	/**
 	 * Le version of le plugin
 	 */
-	const VERSION = '1.0.4';
+	const VERSION = '1.0.5';
 
 	/**
 	 * Holds our plugin instance
@@ -172,9 +172,9 @@ class Plugin {
 
 		register_rest_route(
 			Suggestions\Action::REST_PREFIX, '/search/', [
-			'methods' => 'GET',
-			'callback' => function( $request ) {
-				return ( new Suggestions\Search() )->get( $request->get_param( 'q' ) );
+				'methods' => 'GET',
+				'callback' => function( $request ) {
+					return ( new Suggestions\Search() )->get( $request->get_param( 'q' ) );
 				},
 				'permission_callback' => 'is_user_logged_in',
 			]

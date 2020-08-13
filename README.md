@@ -81,6 +81,11 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
 12. 1.0.4
   * fix the autoloader to support web roots with underscore characters
   * update npm packages and add core-js as a dev dependency
+13. 1.0.5
+  * Update build dependencies
+  * Add permission_callback on rest api routes for 5.5 update
+  * Add capability checks to instant actions
+
 
 ## Develop
 
