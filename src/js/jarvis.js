@@ -376,7 +376,8 @@ const Jarvis = ( function( $, _, Bloodhound ) {
 
 			// does the url argument match the searchurl
 			this.isJarvisUrl = function( url ) {
-				return url.indexOf( this.settings.searchurl ) > -1;
+				const matches = ( new URL( url, location.origin ) ).pathname.match( /^\/wp-json\/jarvis\// );
+				return matches && matches.length > 0;
 			}
 
 			// test if constructor was called after the page is loaded, or on DOMContentLoaded
