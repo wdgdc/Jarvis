@@ -1,12 +1,14 @@
-#subversion dirs
+# subversion dirs
 tags
 trunk
 branches
 .svn
 
-#develop paths
+# develop/build paths
 node_modules/
 dist/*
+vendor/
+.vscode/
 
 # release (zip) files
 *.zip

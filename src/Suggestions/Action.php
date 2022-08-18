@@ -7,8 +7,8 @@ abstract class Action {
 	const REST_PREFIX = 'jarvis/v1';
 
 	protected $rest_route;
-	protected $rest_methods = [];
-	protected $rest_args = [];
+	protected $rest_methods             = [];
+	protected $rest_args                = [];
 	protected $rest_permission_callback = 'is_user_logged_in';
 
 	public function current_user_can() {

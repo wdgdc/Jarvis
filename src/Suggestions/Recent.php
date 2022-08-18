@@ -28,7 +28,7 @@ class Recent {
 		$query_args = apply_filters(
 			'jarvis/suggestions/recent/query',
 			[
-				'post_type'      => get_post_types( ['show_ui' => true ], 'names' ),
+				'post_type'      => get_post_types( [ 'show_ui' => true ], 'names' ),
 				'posts_per_page' => 10,
 				'author'         => get_current_user_id(),
 				'orderby'        => 'modified',
@@ -40,7 +40,7 @@ class Recent {
 		$query = new \WP_Query( $query_args );
 
 		if ( ! empty( $query->posts ) ) {
-			foreach( $query->posts as $post_id ) {
+			foreach ( $query->posts as $post_id ) {
 				$post = new \Jarvis\Models\Post( $post_id );
 				array_push( $post->attributes, 'Recent' );
 				array_push( $posts, $post );

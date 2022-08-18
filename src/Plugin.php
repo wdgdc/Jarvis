@@ -5,28 +5,18 @@ namespace Jarvis;
 class Plugin {
 
 	/**
-	 * Le version of le plugin
-	 */
-	const VERSION = '1.0.6';
-
-	/**
-	 * Holds our plugin instance
-	 *
-	 * @access private
-	 */
-	private static $_instance;
-
-	/**
 	 * Get the instance of the plugin through the singleton pattern
 	 *
 	 * @access public
 	 */
 	public static function get_instance() {
-		if ( empty( self::$_instance ) ) {
-			self::$_instance = new self();
+		static $instance;
+
+		if ( empty( $instance ) ) {
+			$instance = new self();
 		}
 
-		return self::$_instance;
+		return $instance;
 	}
 
 	/**
@@ -38,6 +28,7 @@ class Plugin {
 		'wp'              => 'Match WordPress Theme',
 		'fresh'           => 'Fresh',
 		'light'           => 'Light',
+		'modern'          => 'Modern',
 		'blue'            => 'Blue',
 		'coffee'          => 'Coffee',
 		'ectoplasm'       => 'Ectoplasm',
@@ -47,6 +38,7 @@ class Plugin {
 		'one-dark'        => 'One Dark',
 		'solarized-dark'  => 'Solarized Dark',
 		'solarized-light' => 'Solarized Light',
+		'dracula'         => 'Dracula',
 	];
 
 	/**
@@ -73,11 +65,11 @@ class Plugin {
 	 *
 	 * @access private
 	 */
-	private $_instants = [
+	private $instants = [
 		'Jarvis\Suggestions\Recent',
 		'Jarvis\Suggestions\Menus',
 		'Jarvis\Suggestions\Logout',
-		'Jarvis\Suggestions\Flush_Rewrite_Rules',
+		'Jarvis\Suggestions\FlushRewriteRules',
 	];
 
 	/**
@@ -85,46 +77,15 @@ class Plugin {
 	 *
 	 * @see admin_init
 	 */
-	private $instants = [];
+	private $instants_index = [];
 
 	/**
-	 * This is the auto loader for all classes in the current namespace
-	 * All file names must be kebab-cased and class names Snake_Cased
-	 *
-	 * @param string $class_name
-	 * @return void
-	 * @access public
-	 */
-	public static function autoload( $class_name ) {
-		if ( ! preg_match( '/^' . preg_quote( __NAMESPACE__, '/' ) . '/', $class_name ) ) {
-			return;
-		}
-
-		// remove namespace from classname
-		$path = preg_replace( '/^' . preg_quote( __NAMESPACE__, '/' ) . '/', '', $class_name );
-		// replace \ with / and  _ with -
-		$path = str_replace( [ '\\', '_' ], [ '/', '-' ], $path );
-		// convert to lowercase
-		$path = strtolower( $path );
-		// add php extension
-		$path = $path . '.php';
-
-		// prepend current dir
-		$path = __DIR__ . $path;
-
-		if ( file_exists( $path ) ) {
-			require_once $path;
-		}
-	}
-
-	/**
-	 * Add our wordpress hooks
+	 * Add our WordPress hooks
 	 *
 	 * @access private
 	 */
 	private function __construct() {
-		spl_autoload_register( [ __CLASS__, 'autoload' ] );
-		add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ] , 100 );
+		add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ], 100 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
 		add_action( 'admin_init', [ $this, 'admin_init' ], 20 );
 		add_action( 'edit_user_profile_update', [ $this, 'edit_user_profile_update' ] );
@@ -132,6 +93,7 @@ class Plugin {
 		add_action( 'personal_options_update', [ $this, 'edit_user_profile_update' ] );
 		add_action( 'rest_api_init', [ $this, 'rest_api_init' ], 20 );
 		add_action( 'show_user_profile', [ $this, 'show_user_profile' ] );
+		add_filter( 'admin_body_class', [ $this, 'admin_body_class' ], 20 );
 	}
 
 	/**
@@ -171,7 +133,9 @@ class Plugin {
 		$this->get_instants();
 
 		register_rest_route(
-			Suggestions\Action::REST_PREFIX, '/search/', [
+			Suggestions\Action::REST_PREFIX,
+			'/search/',
+			[
 				'methods' => 'GET',
 				'callback' => function( $request ) {
 					return ( new Suggestions\Search() )->get( $request->get_param( 'q' ) );
@@ -180,10 +144,10 @@ class Plugin {
 			]
 		);
 
-		if ( ! empty( $this->instants ) ) {
-			foreach( $this->instants as $instant ) {
+		if ( ! empty( $this->instants_index ) ) {
+			foreach ( $this->instants_index as $instant ) {
 				if ( is_callable( [ $instant, 'register_rest_route' ] ) ) {
-					$suggestions = $instant->register_rest_route();
+					$instant->register_rest_route();
 				}
 			}
 		}
@@ -196,7 +160,7 @@ class Plugin {
 	 * @access private
 	 */
 	private function get_instants() {
-		if ( empty( $this->instants ) ) {
+		if ( empty( $this->instants_index ) ) {
 
 			/**
 			 * filter the list of instant classes that provide instant suggestions through their `get` method
@@ -207,18 +171,18 @@ class Plugin {
 			 *
 			 * @since 1.0.0
 			 */
-			 $this->_instants = apply_filters( 'jarvis/instants', $this->_instants );
+			$this->instants = apply_filters( 'jarvis/instants', $this->instants );
 
-			foreach( $this->_instants as $instant_class ) {
+			foreach ( $this->instants as $instant_class ) {
 				$instant = new $instant_class();
 
 				if ( $instant->current_user_can() ) {
-					$this->instants[ $instant_class ] = $instant;
+					$this->instants_index[ $instant_class ] = $instant;
 				}
 			}
 		}
 
-		return $this->instants;
+		return $this->instants_index;
 	}
 
 	/**
@@ -233,7 +197,7 @@ class Plugin {
 		 * Filter the default theme
 		 *
 		 * @name jarvis/theme_default
-		 * @param string default theme of 'wp' which matches the wordpress color scheme
+		 * @param string default theme of 'wp' which matches the WordPress color scheme
 		 * @return string
 		 *
 		 * @since 1.0.0
@@ -253,34 +217,6 @@ class Plugin {
 	}
 
 	/**
-	 * Get the full uri for a theme stylesheet
-	 *
-	 * @param string $theme
-	 * @return string
-	 *
-	 * @access private
-	 */
-	private function get_theme_uri( $theme ) {
-
-		/**
-		 * Filter the css uri for a custom theme with a theme specific filter name
-		 *
-		 * @name jarvis/theme/theme-name from $this->themes
-		 * @param string $theme_css_uri - the full url to the css file for the custom theme
-		 * @return string
-		 *
-		 * @since 1.0.0
-		 */
-		$theme_css_uri = apply_filters( 'jarvis/theme/' . $theme, JARVIS_URI . '/dist/themes/'. $theme .'.css' );
-
-		if ( empty( $theme_css_uri ) || ! preg_match( '/\.css$/', strval( $theme_css_uri ) ) ) {
-			$theme_css_uri = JARVIS_URI . '/dist/themes/fresh.css';
-		}
-
-		return $theme_css_uri;
-	}
-
-	/**
 	 * Build our options to pass into the javascript constructor
 	 *
 	 * @return array
@@ -292,14 +228,19 @@ class Plugin {
 			return $this->options;
 		}
 
-		$this->options = array_merge( $this->options, [
-			'nonce'     => wp_create_nonce( 'wp_rest' ),  // use wp_rest since we're using the rest api and relying on their nonces
-			'searchurl' => rest_url( Suggestions\Search::REST_PREFIX . '/search' ),
-			'theme'     => $this->get_theme(),
-		] );
+		$this->options = array_merge(
+			$this->options,
+			[
+				'nonce'     => wp_create_nonce( 'wp_rest' ),  // use wp_rest since we're using the rest api and relying on their nonces
+				'searchurl' => rest_url( Suggestions\Search::REST_PREFIX . '/search' ),
+				'theme'     => $this->get_theme(),
+			]
+		);
 
 		// user hotkey preference
-		if ( $user_hotkey = get_user_meta( get_current_user_id(), 'jarvis_hotkey', true ) ) {
+		$user_hotkey = get_user_meta( get_current_user_id(), 'jarvis_hotkey', true );
+
+		if ( ! empty( $user_hotkey ) ) {
 			$this->options['hotkey'] = $user_hotkey;
 		}
 
@@ -313,7 +254,7 @@ class Plugin {
 	 * @access private
 	 */
 	private function get_suggestions() {
-		foreach( $this->instants as $instant ) {
+		foreach ( $this->instants_index as $instant ) {
 			$instant_suggestions = $instant->get();
 
 			if ( empty( $instant_suggestions ) ) {
@@ -361,7 +302,7 @@ class Plugin {
 			<tr>
 				<th><label for="jarvis-hotkey">Hotkey</label></th>
 				<td>
-					<p><input type="text" name="jarvis_hotkey" id="jarvis_hotkey" maxlength="1" value="<?php echo $this->options['hotkey']; ?>" class="regular-text" autocomplete="off" /></p>
+					<p><input type="text" name="jarvis_hotkey" id="jarvis_hotkey" maxlength="1" value="<?= esc_attr( $this->options['hotkey'] ); ?>" class="regular-text" autocomplete="off" /></p>
 					<p><span class="description">Enter the hot key you would like to invoke Jarvis with. Supports lowercase a-z, 0-9, and any of these special characters: <code>; = , - . / \ ` [ ] |</code>.</span></p>
 				</td>
 			</tr>
@@ -370,15 +311,16 @@ class Plugin {
 				<td>
 					<p>
 						<select name="jarvis_theme" class="regular-text">
-							<?php foreach( $this->themes as $theme => $label ) : ?>
-							<option data-uri="<?php echo esc_attr( $this->get_theme_uri( $theme ) ); ?>" value="<?php echo esc_attr( $theme ); ?>"<?php if ( $theme === $user_theme ) echo ' selected'; ?>><?php echo esc_html( $label ); ?></option>
+							<?php foreach ( $this->themes as $theme => $label ) : ?>
+							<option value="<?= esc_attr( $theme ); ?>"<?php selected( $theme, $user_theme ); ?>><?= esc_html( $label ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</p>
 				</td>
 			</tr>
 		</table>
-	<?php }
+		<?php
+	}
 
 	/**
 	 * Save the user profile fields
@@ -388,6 +330,8 @@ class Plugin {
 	 * @action personal_options_update, edit_user_profile_update
 	 */
 	public function edit_user_profile_update( $user_id ) {
+		check_admin_referer( 'update-user_' . $user_id );
+
 		if ( current_user_can( 'edit_user', $user_id ) ) {
 			update_user_meta( $user_id, 'jarvis_hotkey', sanitize_text_field( $_POST['jarvis_hotkey'] ) );
 			update_user_meta( $user_id, 'jarvis_theme', sanitize_text_field( $_POST['jarvis_theme'] ) );
@@ -401,19 +345,33 @@ class Plugin {
 	 * @action admin_enqueue_scripts
 	 */
 	public function admin_enqueue_scripts() {
-		$this->get_options();
-
-		wp_register_script( 'typeahead', JARVIS_URI . '/dist/vendor/typeahead.js/dist/typeahead.bundle.min.js', array( 'jquery' ), self::VERSION, true );
-		wp_enqueue_script( 'wp-jarvis', JARVIS_URI . '/dist/jarvis.js', array( 'jquery', 'underscore', 'backbone', 'typeahead' ), self::VERSION, true );
-
-		wp_add_inline_script( 'wp-jarvis', 'window.jarvis = new Jarvis('. wp_json_encode( $this->options, ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) ) .', ' . wp_json_encode( $this->get_suggestions(), ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) ) . ');', 'after' );
-
-		wp_enqueue_style( 'wp-jarvis', JARVIS_URI . '/dist/jarvis.css', [], self::VERSION, 'screen' );
-		wp_enqueue_style( 'wp-jarvis-theme', $this->get_theme_uri( $this->options['theme'] ), [], self::VERSION, 'screen' );
+		wp_enqueue_style( 'wp-jarvis', JARVIS_URI . '/css/jarvis.css', [], JARVIS_VERSION, 'screen' );
+		wp_enqueue_script( 'wp-jarvis', JARVIS_URI . '/dist/js/jarvis.js', array( 'jquery', 'lodash' ), JARVIS_VERSION, true );
+		wp_add_inline_script(
+			'wp-jarvis',
+			sprintf(
+				'window.jarvis = new Jarvis(%s, %s);',
+				wp_json_encode( $this->get_options(), ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) ),
+				wp_json_encode( $this->get_suggestions(), ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) )
+			),
+			'after'
+		);
 
 		if ( 'profile' === get_current_screen()->id ) {
-			wp_enqueue_script( 'wp-jarvis-user-profile', JARVIS_URI . '/dist/jarvis-user-profile.js', array( 'jquery', 'wp-jarvis' ), self::VERSION, true );
-			wp_add_inline_script( 'wp-jarvis-user-profile', 'window.jarvis.userProfile = new Jarvis.UserProfile('. json_encode( [ 'version' => self::VERSION, 'jarvisUri' => JARVIS_URI ] ).');', 'after' );
+			wp_enqueue_script( 'wp-jarvis-user-profile', JARVIS_URI . '/dist/js/jarvis-user-profile.js', array( 'jquery', 'wp-jarvis' ), JARVIS_VERSION, true );
+			wp_add_inline_script(
+				'wp-jarvis-user-profile',
+				sprintf(
+					'window.jarvis.userProfile = new Jarvis.UserProfile(%s)',
+					wp_json_encode(
+						[
+							'version' => JARVIS_VERSION,
+							'jarvisUri' => JARVIS_URI,
+						]
+					)
+				),
+				'after'
+			);
 		}
 	}
 
@@ -431,16 +389,33 @@ class Plugin {
 			return;
 		}
 
-		$admin_bar->add_menu( [
-			'id' => 'jarvis_menubar_icon',
-			'title' => '<span>Jarvis Search</span>',
-			'href' => '#jarvis',
-			'meta' => array(
-				'title' => 'Invoke Jarvis',
-				'class' => 'dashicon menupop'
-			),
-			'parent' => 'top-secondary'
-		] );
+		$admin_bar->add_menu(
+			[
+				'id'    => 'jarvis_menubar_icon',
+				'title' => '<span>Jarvis Search</span>',
+				'href'  => '#jarvis',
+				'meta'  => [
+					'title' => 'Invoke Jarvis',
+					'class' => 'dashicon menupop',
+				],
+				'parent' => 'top-secondary',
+			]
+		);
+	}
 
+	/**
+	 * Add the current jarvis theme to the body class for the user
+	 *
+	 * @param string
+	 * @return string
+	 */
+	public function admin_body_class( $className ) {
+		$theme = $this->get_theme();
+
+		if ( 'wp' !== $theme ) {
+			$className = trim( trim( $className ) . ' jarvis-theme-' . $theme );
+		}
+
+		return $className;
 	}
 }

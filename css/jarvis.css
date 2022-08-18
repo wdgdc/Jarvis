@@ -1,0 +1,479 @@
+/* Color Schemes */
+:root {
+	--jarvis--hint-background: rgb(235, 235, 235);
+	--jarvis--hint-text: rgb(150, 150, 150);
+	--jarvis--input-background: rgb(235, 235, 235);
+	--jarvis--input-text: inherit;
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(128, 128, 128);
+	--jarvis--menu-background: rgb(255, 255, 255);
+	--jarvis--modal-background: rgb(255, 255, 255);
+	--jarvis--overlay-background: rgba(0, 0, 0, .7);
+	--jarvis--suggestion-focus-background: rgb(239, 248, 255);
+	--jarvis--suggestion-focus-text: rgb(0, 115, 170);
+	--jarvis--suggestion-focus: rgba(255, 255, 255, .2);
+	--jarvis--suggestion-hover: rgba(255, 255, 255, .08);
+	--jarvis--suggestion-text: rgb(0, 115, 170);
+	--jarvis--suggestion-hover-background: rgb(239, 248, 255);
+	--jarvis--suggestion-hover-text: rgb(213, 78, 33);
+}
+
+body.admin-color-light,
+html > body.jarvis-theme-light {
+	--jarvis--hint-background: rgb(235, 235, 235);
+	--jarvis--hint-text: rgb(150, 150, 150);
+	--jarvis--input-text: inherit;
+	--jarvis--input-background: rgb(229, 229, 229);
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(214, 78, 7);
+	--jarvis--menu-background: rgb(255, 255, 255);
+	--jarvis--modal-background: rgb(255, 255, 255);
+	--jarvis--overlay-background: rgba(153, 153, 153, .8);
+	--jarvis--suggestion-text: rgb(4, 164, 204);
+	--jarvis--suggestion-hover-background: rgba(4, 164, 204, .15);
+	--jarvis--suggestion-hover-text: rgb(214, 78, 7);
+	--jarvis--suggestion-focus-background: rgb(4, 164, 204);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+}
+
+body.admin-color-modern,
+html > body.jarvis-theme-modern {
+	--jarvis--hint-background: rgb(235, 235, 235);
+	--jarvis--hint-text: rgb(150, 150, 150);
+	--jarvis--input-text: inherit;
+	--jarvis--input-background: rgb(229, 229, 229);
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(51, 240, 120);
+	--jarvis--menu-background: rgb(30, 30, 30);
+	--jarvis--modal-background: rgb(30, 30, 30);
+	--jarvis--overlay-background: rgba(153, 153, 153, .8);
+	--jarvis--suggestion-text: rgb(255, 255, 255);
+	--jarvis--suggestion-hover-background: rgba(4, 164, 204, .15);
+	--jarvis--suggestion-hover-text: rgb(51, 240, 120);
+	--jarvis--suggestion-focus-background: rgb(56, 88, 233);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+}
+
+body.admin-color-blue,
+html > body.jarvis-theme-blue {
+	--jarvis--hint-background: rgb(235, 235, 235);
+	--jarvis--hint-text: rgb(150, 150, 150);
+	--jarvis--input-background: rgb(255, 255, 255);
+	--jarvis--input-text: inherit;
+	--jarvis--loading-dot: rgb(116, 182, 206);
+	--jarvis--loading: rgb(9, 100, 132);
+	--jarvis--menu-background: rgb(82, 172, 204);
+	--jarvis--modal-background: rgb(82, 172, 204);
+	--jarvis--overlay-background: rgba(9, 100, 132, .6);
+	--jarvis--suggestion-focus-background: rgba(255, 255, 255, .3);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+	--jarvis--suggestion-hover-background: rgba(255, 255, 255, .2);
+	--jarvis--suggestion-hover-text: rgb(255, 255, 255);
+	--jarvis--suggestion-text: rgb(255, 255, 255);
+}
+
+body.admin-color-coffee,
+html > body.jarvis-theme-coffee {
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(70, 64, 60);
+	--jarvis--menu-background: rgb(70, 64, 60);
+	--jarvis--modal-background: rgb(70, 64, 60);
+	--jarvis--overlay-background: rgba(199, 165, 137, .8);
+	--jarvis--suggestion-focus-background: rgb(199, 165, 137);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+	--jarvis--suggestion-hover-background: rgb(199, 165, 137, .8);
+	--jarvis--suggestion-hover-text: rgb(255, 255, 255);
+	--jarvis--suggestion-text: rgb(255, 255, 255);
+}
+
+body.admin-color-ectoplasm,
+html > body.jarvis-theme-ectoplasm {
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(212, 111, 21);
+	--jarvis--menu-background: rgb(65, 50, 86);
+	--jarvis--modal-background: rgb(65, 50, 86);
+	--jarvis--overlay-background: rgba(163, 183, 69, .7);
+	--jarvis--suggestion-focus-background: rgb(163, 183, 69);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+	--jarvis--suggestion-hover-background: rgba(163, 183, 69, .8);
+	--jarvis--suggestion-hover-text: rgb(255, 255, 255);
+	--jarvis--suggestion-text: rgb(255, 255, 255);
+}
+
+body.admin-color-midnight,
+html > body.jarvis-theme-midnight {
+	--jarvis--hint-text: rgba(255, 255, 255, .4);
+	--jarvis--input-background: rgb(38, 41, 44);
+	--jarvis--input-text: rgb(200, 200, 200);
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(225, 77, 67);
+	--jarvis--menu-background: rgb(38, 41, 44);
+	--jarvis--modal-background: rgb(38, 41, 44);
+	--jarvis--overlay-background: rgba(38, 41, 44, .85);
+	--jarvis--suggestion-focus-background: rgb(225, 77, 67);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+	--jarvis--suggestion-hover-background: rgb(225, 77, 67);
+	--jarvis--suggestion-hover-text: rgb(255, 255, 255);
+	--jarvis--suggestion-text: rgb(200, 200, 200);
+}
+
+body.admin-color-ocean,
+html > body.jarvis-theme-ocean {
+	--jarvis--hint-text: rgba(98, 124, 131, .4);
+	--jarvis--input-background: rgb(230, 230, 230);
+	--jarvis--input-text: rgb(98, 124, 131);
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(170, 157, 136);
+	--jarvis--menu-background: rgb(98, 124, 131);
+	--jarvis--modal-background: rgb(98, 124, 131);
+	--jarvis--overlay-background: rgba(158, 186, 160, .85);
+	--jarvis--suggestion-focus-background: rgb(158, 186, 160);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+	--jarvis--suggestion-hover-background: rgba(158, 186, 160, .8);
+	--jarvis--suggestion-hover-text: rgb(255, 255, 255);
+	--jarvis--suggestion-text: rgb(255, 255, 255);
+}
+
+body.admin-color-sunrise,
+html > body.jarvis-theme-sunrise {
+	--jarvis--hint-text: rgba(180, 60, 56, .4);
+	--jarvis--input-background: rgba(230, 230, 230, .1);
+	--jarvis--input-text: rgb(180, 60, 56);
+	--jarvis--loading-dot: rgb(255, 255, 255);
+	--jarvis--loading: rgb(221, 130, 59);
+	--jarvis--menu-background: rgb(180, 60, 56);
+	--jarvis--modal-background: rgb(180, 60, 56);
+	--jarvis--overlay-background: rgba(221, 130, 59, .6);
+	--jarvis--suggestion-focus-background: rgb(221, 130, 59);
+	--jarvis--suggestion-focus-text: rgb(255, 255, 255);
+	--jarvis--suggestion-hover-background: rgba(221, 130, 59, .8);
+	--jarvis--suggestion-hover-text: rgb(255, 255, 255);
+	--jarvis--suggestion-text: rgb(255, 255, 255);
+}
+
+html > body.jarvis-theme-one-dark {
+	--jarvis--hint-text: rgba(255, 255, 255, .4);
+	--jarvis--input-text: rgb(200, 200, 200);
+	--jarvis--input-background: rgba(40, 44, 52, 95%);
+	--jarvis--loading-dot: rgb(100, 100, 100);
+	--jarvis--loading: rgb(200, 200, 200);
+	--jarvis--menu-background: hsl(220, 13%, 18%);
+	--jarvis--modal-background: rgb(40, 44, 52);
+	--jarvis--overlay-background: rgba(40, 44, 52, .85);
+	--jarvis--suggestion-focus-background: rgba(255, 255, 255, .2);
+	--jarvis--suggestion-focus-text: rgb(200, 200, 200);
+	--jarvis--suggestion-hover-background: rgba(255, 255, 255, .08);
+	--jarvis--suggestion-hover-text: rgb(200, 200, 200);
+	--jarvis--suggestion-text: rgb(200, 200, 200);
+}
+
+html > body.jarvis-theme-solarized-dark {
+	--jarvis--hint-text: rgb(101, 123, 131);
+	--jarvis--input-text: rgb(253, 246, 227);
+	--jarvis--input-background: rgb(0, 43, 54);
+	--jarvis--loading-dot: rgb(253, 246, 227);
+	--jarvis--loading: rgb(220, 50, 47);
+	--jarvis--menu-background: rgb(7, 54, 66);
+	--jarvis--modal-background: rgb(7, 54, 66);
+	--jarvis--overlay-background: rgba(0, 43, 54, .85);
+	--jarvis--suggestion-focus-background: rgb(0, 43, 54);
+	--jarvis--suggestion-focus-text: rgb(220, 50, 47);
+	--jarvis--suggestion-hover-background: rgba(0, 43, 54, 95%);
+	--jarvis--suggestion-hover-text: rgb(42, 161, 152);
+	--jarvis--suggestion-text: rgb(253, 246, 227);
+}
+
+html > body.jarvis-theme-solarized-light {
+	--jarvis--hint-text: rgb(131, 148, 150);
+	--jarvis--input-text: rgb(88, 110, 117);
+	--jarvis--input-background: rgb(253, 246, 227);
+	--jarvis--loading-dot: rgb(253, 246, 227);
+	--jarvis--loading: rgb(7, 54, 66);
+	--jarvis--menu-background: rgb(238, 232, 213);
+	--jarvis--modal-background: rgb(238, 232, 213);
+	--jarvis--overlay-background: rgba(88, 110, 117, .8);
+	--jarvis--suggestion-focus-background: rgb(253, 246, 227);
+	--jarvis--suggestion-focus-text: rgb(203, 75, 22);
+	--jarvis--suggestion-hover-background: rgb(238, 232, 213);
+	--jarvis--suggestion-hover-text: rgb(203, 75, 22);
+	--jarvis--suggestion-text: rgb(88, 110, 117);
+}
+
+/* https://spec.draculatheme.com/#sec-Color-Palette */
+html > body.jarvis-theme-dracula {
+	--jarvis--hint-background: rgb(248, 248, 242);
+	--jarvis--hint-text: rgb(150, 150, 150);
+	--jarvis--input-background: rgb(40, 42, 54);
+	--jarvis--input-text: rgb(248, 248, 242);
+	--jarvis--loading-dot: rgb(248, 248, 242);
+	--jarvis--loading: rgb(128, 128, 128);
+	--jarvis--menu-background: rgb(25, 26, 33);
+	--jarvis--modal-background: rgb(25, 26, 33);
+	--jarvis--overlay-background: rgba(40, 42, 54, .85);
+	--jarvis--suggestion-focus-background: rgba(40, 42, 54, .8);
+	--jarvis--suggestion-focus-text: rgb(241, 250, 140);
+	--jarvis--suggestion-focus: rgba(40, 42, 54, .9);
+	--jarvis--suggestion-hover: rgba(40, 42, 54, .8);
+	--jarvis--suggestion-text: rgb(248, 248, 242);
+	--jarvis--suggestion-hover-background: rgb(40, 42, 54);
+	--jarvis--suggestion-hover-text: rgb(255, 121, 198);
+}
+/* /ColorSchemes */
+
+@keyframes jarvis-loading-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.jarvis__overlay {
+	background-color: var(--jarvis--overlay-background);
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 100000;
+}
+
+.jarvis__modal {
+	background-color: var(--jarvis--modal-background);
+	border-radius: .5em;
+	box-sizing: border-box;
+	left: 50%;
+	max-width: 750px;
+	padding: 1em;
+	position: fixed;
+	top: 32px;
+	transform: translateX(-50%);
+	width: 96%;
+	z-index: 100001;
+}
+
+.jarvis__wrap {
+	width: 100%;
+}
+
+.jarvis__search {
+	width: 100%;
+}
+
+.jarvis__hint,
+.jarvis__input {
+	border: none;
+	font-size: 2em;
+	padding: .5em;
+	width: 100%;
+}
+
+.jarvis__hint[type="text"] {
+	background-color: var(--jarvis--input-background);
+	color: var(--jarvis--hint-text);
+}
+
+.jarvis__input[type="text"] {
+	background-color: var(--jarvis--input-background) !important;
+	color: var(--jarvis--input-text);
+}
+
+.jarvis__loading {
+	background-color: var(--jarvis--loading);
+	animation: jarvis-loading-spin 1000ms linear infinite;
+	border-radius: 50%;
+	height: 20px;
+	margin-top: -8px;
+	opacity: .7;
+	position: absolute;
+	right: 20px;
+	top: 50%;
+	width: 20px;
+}
+
+.jarvis__loading::after {
+	background-color: var(--jarvis--loading-dot);
+	content: '';
+	display: block;
+	height: 4px;
+	width: 4px;
+	position: absolute;
+	top: 2px;
+	left: 50%;
+	transform: translateX(-50%);
+	border-radius: 50%;
+}
+
+.jarvis__menu {
+	background-color: var(--jarvis--menu-background);
+	border-radius: .5em;
+	padding: 1em;
+	margin: 0 -1em 0 -1em;
+	width: 100%;
+}
+
+.jarvis__menu a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	padding: .5em;
+	border: 1px solid transparent;
+	position: relative;
+}
+
+.jarvis__suggestion {
+	overflow: hidden;
+}
+
+.jarvis__suggestion a {
+	border-radius: .5em;
+	color: var(--jarvis--suggestion-text);
+}
+
+.jarvis__suggestion a:hover {
+	background-color: var(--jarvis--suggestion-hover-background);
+	color: var(--jarvis--suggestion-hover-text);
+}
+
+.jarvis__cursor a {
+	background-color: var(--jarvis--suggestion-focus-background);
+	color: var(--jarvis--suggestion-focus-text);
+}
+
+.jarvis__cursor a:hover {
+	border-color: rgb(209, 218, 225);
+	background-color: var(--jarvis--suggestion-hover-background);
+}
+
+.jarvis__cursor a:focus {
+	border-color: rgb(209, 218, 225);
+	background-color: var(--jarvis--suggestion-focus);
+}
+
+.jarvis__icon {
+	background-size: 28px 28px;
+	box-sizing: border-box;
+	flex: none;
+	height: 28px;
+	line-height: 28px;
+	margin-right: 8px;
+	text-align: left;
+	width: 28px;
+}
+
+.jarvis__icon svg,
+.jarvis__icon img {
+	height: 24px;
+	width: 24px;
+	margin: 2px;
+}
+
+.jarvis__icon svg path {
+	fill: currentColor;
+}
+
+.jarvis__icon.dashicons-before {
+	background: none;
+	padding-top: 2px;
+	padding-bottom: 2px;
+
+}
+
+.jarvis__icon.dashicons-before::before {
+	height: 24px;
+	width: 24px;
+	font-size: 24px;
+	line-height: 24px;
+}
+
+.jarvis__title {
+	display: block;
+	line-height: 28px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 1;
+}
+
+.jarvis__pills {
+	display: block;
+	flex: none;
+	font-size: .8em;
+	opacity: .75;
+	pointer-events: none;
+	text-transform: uppercase;
+	user-select: none;
+	white-space: nowrap;
+}
+
+.jarvis__pill {
+	padding: 1px 3px;
+	border: 1px solid;
+	border-radius: 2px;
+}
+
+input[name="jarvis_hotkey"] {
+	text-align: center;
+	max-width: 30px;
+}
+
+input[name="jarvis_hotkey"]:focus {
+	background-color: gray;
+	color: white;
+}
+
+input[name="jarvis_hotkey"]::selection {
+	background-color: transparent;
+}
+
+#wpadminbar #wp-admin-bar-jarvis_menubar_icon {
+	display: block;
+}
+
+#wpadminbar #wp-admin-bar-jarvis_menubar_icon .ab-item {
+	text-align: center;
+}
+
+#wpadminbar #wp-admin-bar-jarvis_menubar_icon .ab-item span {
+	position: absolute;
+	top: -4em;
+	white-space: nowrap;
+}
+
+#wpadminbar #wp-admin-bar-jarvis_menubar_icon .ab-item::before {
+	-moz-osx-font-smoothing: grayscale;
+	content: "\f179";
+	display: inline-block;
+	float: none;
+	font-family: dashicons;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 400;
+	height: 20px;
+	line-height: 1;
+	margin-right: 0;
+	text-align: center;
+	text-decoration: inherit;
+	vertical-align: -5px;
+	width: 20px;
+
+}
+
+@media screen and (max-width: 782px) {
+	input[name="jarvis_hotkey"] {
+		width: auto;
+	}
+
+	#wp-admin-bar-jarvis_menubar_icon .ab-item {
+		width: 46px;
+	}
+
+	#wp-admin-bar-jarvis_menubar_icon .ab-item::before {
+		font-size: 32px;
+		height: 20px;
+		vertical-align: -10px;
+		width: 28px;
+	}
+}

@@ -26,7 +26,6 @@ class Post extends Model {
 				$this->iconType = 'image';
 				$this->icon     = wp_get_attachment_image_src( get_post_thumbnail_id( $this->id, 'thumbnail' ) )[0];
 			}
-
 		}
 
 		parent::__construct();

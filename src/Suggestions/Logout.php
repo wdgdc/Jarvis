@@ -20,7 +20,7 @@ class Logout {
 		$action->href = add_query_arg(
 			[
 				'action' => 'logout',
-				'_wpnonce' => wp_create_nonce( 'log-out' )
+				'_wpnonce' => wp_create_nonce( 'log-out' ),
 			],
 			home_url( 'wp-login.php' )
 		);

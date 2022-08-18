@@ -14,15 +14,15 @@ class Term extends Model {
 		$this->kind     = 'term';
 		$this->iconType = 'dashicon';
 
-		switch( $this->type ) {
+		switch ( $this->type ) {
 			case 'nav_menu':
-				$this->href = sprintf( 'nav-menus.php?action=edit&menu=%d', $this->id );
+				$this->href    = sprintf( 'nav-menus.php?action=edit&menu=%d', $this->id );
 				$this->iconKey = 'dashicons-menu';
-			break;
+				break;
 			default:
-				$this->href = sprintf( 'edit-tags.php?action=edit&tag_ID=%d&taxonomy=%s', $this->id, $this->type );
-				$this->iconKey  = is_taxonomy_hierarchical( $term->taxonomy ) ? 'category' : 'post_tag';
-			break;
+				$this->href    = sprintf( 'edit-tags.php?action=edit&tag_ID=%d&taxonomy=%s', $this->id, $this->type );
+				$this->iconKey = is_taxonomy_hierarchical( $term->taxonomy ) ? 'category' : 'post_tag';
+				break;
 		}
 
 		parent::__construct();

@@ -2,10 +2,10 @@
 
 namespace Jarvis\Suggestions;
 
-class Flush_Rewrite_Rules extends Action {
+class FlushRewriteRules extends Action {
 
-	protected $rest_route = 'flush_rewrite_rules';
-	protected $rest_args = [];
+	protected $rest_route   = 'flush_rewrite_rules';
+	protected $rest_args    = [];
 	protected $rest_methods = [ 'GET' ];
 
 	public function current_user_can() {

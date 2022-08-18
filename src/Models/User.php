@@ -16,13 +16,19 @@ class User extends Model {
 
 		array_push( $this->attributes, $this->slug );
 
-		$avatar = get_avatar_data( $this->id, [
-			'size' => [ 28, 28 ],
-		] );
+		$avatar = get_avatar_data(
+			$this->id,
+			[
+				'size' => [
+					28,
+					28,
+				],
+			]
+		);
 
 		if ( ! empty( $avatar['found_avatar'] ) ) {
 			$this->iconType = 'image';
-			$this->icon = $avatar['url'];
+			$this->icon     = $avatar['url'];
 		} else {
 			$this->icon = 'dashicons-users';
 		}

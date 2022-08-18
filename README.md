@@ -87,24 +87,27 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
   * Add capability checks to instant actions
 14. 1.0.6
   * Hotfix for missing svn change
-
+15. 1.1.0
+	* Drop IE11 support
+  * Add Modern and Dracula color schemes
+	* Refactor themes to use CSS variables
+  * Refactor the build process from a gulp build to es modules with rollup and bundle typeahead/bloodhound dependencies
+	* Introduce composer for autoloading and build scripts
+	* Introduce phpcs with WP Coding Standards
 
 ## Develop
 
 The plugin now uses a gulp based build pipeline that can be executed through npm scripts.
 
-* requires `node` 8 and `npm` 5 or higher, should work with `node` 6 but haven't tested
+* requires `composer` 2
+* requires `node` 14 and `npm` 8 or higher
 * Public dependencies should be installed with npm using `npm i package-name --save`, while dev depenedencies like gulp should be installed with `npm i package-name --save-dev`
 
 ### Commands
 
-* `npm run build:js` will compile javascript files using babel into the dist directory
-* `npm run build:scss` will compile scss files using sass & autoprefixer into the dist directory
-* `npm run vendor` will copy front end dependencies from node_modules to dist/vendor
-* `npm run build` will run the build:js, build:scss, and vendor tasks simultaneously
-* `npm run watch` will start watching for changes in js and scss files
-* `npm start` will run the build and vendor tasks simultaneously followed by the watch task - this is the default task
-* `npm run release` will create a zip the current build of the plugin to be included in a github release`
+* `npm run build` will run the rollup build and exit
+* `npm start` will run the rollup build and watch for changes - this is the default task
+* `composer archive` will create a zip the current build of the plugin to be included in a github release - be sure to run `composer update --no-dev` before creating the archive
 
 ## Authors
 

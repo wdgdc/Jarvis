@@ -6,11 +6,11 @@ Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 4.8
-Tested up to: 5.5.0
-Stable tag: 1.0.6
-Version: 1.0.6
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tested up to: 6.0.1
+Stable tag: 1.1.0
+Version: 1.1.0
+License: MIT
+License URI: https://opensource.org/licenses/mit-license.php
 Donate link: http://www.webdevelopmentgroup.com
 
 Jarvis is your admin assistant, putting WordPress at your fingertips via a quicksearch interface.
@@ -64,6 +64,14 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 
 == Changelog ==
+
+= 1.1.0 =
+* Drop IE11 support
+* Add Modern and Dracula color schemes
+* Refactor themes to use CSS variables
+* Refactor the build process from a gulp build to es modules with rollup and bundle typeahead/bloodhound dependencies
+* Introduce composer for autoloading and build scripts
+* Introduce phpcs with WP Coding Standards
 
 = 1.0.6 =
 * Hotfix for missing svn change
