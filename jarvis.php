@@ -12,7 +12,7 @@ Text Domain: jarvis
 
 namespace Jarvis;
 
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 define( 'JARVIS_PATH', __DIR__ );
 define( 'JARVIS_URI', plugins_url( '', __FILE__ ) );
