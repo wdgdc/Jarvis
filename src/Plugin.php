@@ -351,8 +351,8 @@ class Plugin {
 			'wp-jarvis',
 			sprintf(
 				'window.jarvis = new Jarvis(%s, %s);',
-				wp_json_encode( $this->get_options(), ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) ),
-				wp_json_encode( $this->get_suggestions(), ( WP_DEBUG ? JSON_PRETTY_PRINT : null ) )
+				wp_json_encode( $this->get_options(), ( WP_DEBUG ? JSON_PRETTY_PRINT : 0 ) ),
+				wp_json_encode( $this->get_suggestions(), ( WP_DEBUG ? JSON_PRETTY_PRINT : 0 ) )
 			),
 			'after'
 		);
