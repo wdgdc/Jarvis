@@ -94,6 +94,8 @@ Jarvis is extendable to include your custom plugin data though filters.  See htt
   * Refactor the build process from a gulp build to es modules with rollup and bundle typeahead/bloodhound dependencies
 	* Introduce composer for autoloading and build scripts
 	* Introduce phpcs with WP Coding Standards
+16. 1.1.1
+	* Fix PHP 8.1 compatibility
 
 ## Develop
 

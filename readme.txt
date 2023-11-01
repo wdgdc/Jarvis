@@ -6,9 +6,9 @@ Tags: jarvis, wordpress, plugin, posts, pages, search, launchbar, admin, menu
 Author URI: http://www.webdevelopmentgroup.com
 Author: wdgdc
 Requires at least: 4.8
-Tested up to: 6.0.1
-Stable tag: 1.1.0
-Version: 1.1.0
+Tested up to: 6.3.2
+Stable tag: 1.1.1
+Version: 1.1.1
 License: MIT
 License URI: https://opensource.org/licenses/mit-license.php
 Donate link: http://www.webdevelopmentgroup.com
@@ -64,6 +64,9 @@ You may be on a page that's focusing on a text area or input box. If this is the
 
 
 == Changelog ==
+
+= 1.1.1 =
+* Fix PHP 8.1 compatibility
 
 = 1.1.0 =
 * Drop IE11 support
